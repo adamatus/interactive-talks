@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Interactive Slideshow powered by d3.js</title>
+    <link type="text/css" rel="stylesheet" href="show.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+      <div id="menu">
+          <form>
+              <select id="navigator" onchange="navigateTo(this.options[this.selectedIndex].value)">
+              </select>
+          </form>
+      </div>
+    <script type="text/javascript">
+var slides = [
+    {title:"Background image", loc:"image-background.html"},
+    {title:"Title Page (w/ Image)",loc:"title-image.html"},
+    {title:"Title Page (Text-only)",loc:"title-text.html"},
+    {title:"Bulleted List", loc:"bulleted-list.html"},
+    {title:"Bulleted List (2 Column)", loc:"bulleted-list-2.html"},
+    {title:"Image",loc:"image.html"},
+    {title:"Chart", loc:"chart.html"},
+];
+    </script>
+    <script type="text/javascript" src="my-show.js"></script>
+  </body>
+</html>
+

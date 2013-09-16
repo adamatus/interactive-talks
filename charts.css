@@ -1,0 +1,34 @@
+
+svg {
+  width: 960px;
+  height; 500px;
+  display: block;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+.rule line {
+  stroke: #fff;
+  stroke-opacity: .2;
+  shape-rendering: crispEdges;
+}
+
+.rule:first-child line {
+  stroke: #000;
+  stroke-opacity: 1;
+}
+
+rect {
+  fill-opacity: .6;
+  box-shadow: 10px 10px 5px #000;
+}
+
+text {
+  text-shadow: 0 1px 0 #000;
+}
+
+text.yAxis {
+  color: black;
+  fill: black;
+  text-shadow: 0 1px 0 #FFF;
+}
