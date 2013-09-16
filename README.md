@@ -1,4 +1,4 @@
-interactive-talks
-=================
+Prelim/Thesis Committee Meeting (re: NRSA)
+==========================================
 
-A framework for interactive web-based talks using D3.js
+Talk for my prelim/dissertation committee to discuss my NRSA
