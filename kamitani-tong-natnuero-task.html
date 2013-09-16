@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/colorbrewer.css">
+    <link type="text/css" rel="stylesheet" href="css/button.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body class='inverted'>
+    <div id="body">
+      <div id="chart" align='center'>
+      </div>
+      <script type="text/javascript">
+
+var width = 600;
+    height = 600;
+
+var waves = 30;
+var wavelength = width/waves;
+
+var dirs = [];
+for (var i=0;i < 180; i=i+22.5 ) dirs.push(i);
+
+var grid = d3.scale.linear().range([0, 600]).domain([0,waves]);
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .style('background','rgb(128,128,128)')
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append('svg:clipPath')
+    .attr('id','clip')
+    .append('svg:circle')
+        .attr('cx',width/2)
+        .attr('cy',height/2)
+        .attr('r',(height-(4*wavelength))/2);
+
+var plot = svg.append('svg:g')
+    .attr('id','grating-patch')
+    .attr('clip-path','url(#clip)');
+
+var grating = plot.append('svg:g')
+    .attr('id','grating')
+    .attr('visibility','hidden')
+    .selectAll('.bar').data(d3.range(waves)).enter().append('svg:g')
+        .attr('class','wave')
+        .attr('transform',function(d) { return 'translate('+grid(d)+',0)'; });
+
+grating.append('svg:rect')
+              .attr('height',height)
+              .attr('width',wavelength/2)
+              .attr('fill','black');
+grating.append('svg:rect')
+              .attr('height',height)
+              .attr('width',wavelength/2)
+              .attr('fill','white')
+              .attr('x',wavelength/2);
+
+var center = plot.append('svg:g')
+    .attr('id','center-area')
+    .attr('transform','translate('+width/2+','+height/2+')');
+
+center.append('svg:circle')
+    .attr('r',20)
+    .attr('fill','rgb(128,128,128)');
+center.append('svg:circle')
+    .attr('r',4)
+    .attr('fill','rgb(255,255,255)');
+center.append('svg:circle')
+    .attr('r',2)
+    .attr('fill','rgb(0,0,0)');
+
+var count = 0;
+var amount = 0;
+var angle = 0;
+
+var lastSeg = 0;
+var trialSeg = 0;
+var trialStart = 0;
+var stopAnim = false;
+var dirCount = 0;
+
+var update = function(elapsed) {
+    if ((elapsed - lastSeg) < 250) 
+    {
+        trialSeg = 0;
+    } else if (elapsed - lastSeg < 500) {
+        trialSeg = 1;
+    } else {
+        lastSeg = elapsed;
+        trialSeg = 0;
+    }
+
+    switch (trialSeg) 
+    {
+        case 0:
+            d3.select('#grating').attr('visibility','hidden');
+            break;
+        case 1:
+            amount = Math.round((Math.random()*20)-10);
+            d3.select('#grating')
+                .attr('transform','translate('+amount+',0)')
+                .attr('visibility','');
+            break;
+    }
+
+    if (elapsed > trialStart + 3000)
+    {
+        trialStart = elapsed;
+        if (dirCount++ > 7)
+        {
+            dirCount = 0;
+            d3.select('#grating').attr('visibility','hidden');
+            stopAnim = true;
+        } 
+        d3.select('#grating-patch')
+                .attr('transform','rotate('+dirs[dirCount++]+','+width/2+','+height/2+') ')
+    } 
+    return stopAnim;
+}
+
+var runTrial = function()
+{
+    console.log('Running trial');
+    stopAnim = false;
+    trialStart = 0;
+    shuffle(dirs);
+    d3.select('#grating-patch')
+            .attr('transform','rotate('+dirs[0]+','+width/2+','+height/2+') ')
+    d3.timer(function(elapsed) {
+        return update(elapsed);
+    });
+};
+
+var stopTrial = function()
+{
+    console.log('Stopping trial');
+    stopAnim = true;
+}
+
+function shuffle(array) {
+    var tmp, current, top = array.length;
+
+    if(top) while(--top) {
+        current = Math.floor(Math.random() * (top + 1));
+        tmp = array[current];
+        array[current] = array[top];
+        array[top] = tmp;
+    }
+
+    return array;
+}
+
+var up = function() {
+    runTrial();
+};
+
+var down = function() {
+    stopTrial();
+};
+      </script>
+    </div>
+  </body>
+</html>

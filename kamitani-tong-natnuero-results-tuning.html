@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/colorbrewer.css">
+    <link type="text/css" rel="stylesheet" href="css/button.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <style>
+#play {
+    padding-left: 200px;
+}
+</style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="header">
+         Fig 2. Orientation decoding responses
+      </div>
+      <div id="chart" align="center">
+      </div>
+      <script type="text/javascript">
+
+var width = 600;
+    height = 600;
+
+var direcs = [];
+for (var i=0;i < 180; i=i+22.5 ) direcs.push(i);
+
+var lineLevels = [[0,45,30,0,45,30],
+                  [10,50,20,15,47,22],
+                  [15,30,20,18,33,20],
+                  [20,43,22,10,45,21],
+                  [10,50,11,8,50,5],
+                  [13,65,3,10,65,5],
+                  [3,60,22,15,65,17],
+                  [17,60,5,20,62,3]];
+var lineLevels = [[0,0,0,0,45,30,0,0],
+                  [0,0,0,10,50,20,0,0],
+                  [0,0,10,15,30,20,10,0],
+                  [0,0,0,20,43,22,0,0],
+                  [0,0,0,10,50,11,0,0],
+                  [0,0,0,13,65,3,0,0],
+                  [0,0,0,3,60,22,0,0],
+                  [0,0,0,17,60,5,0,0]];
+
+var createLine = function(a) {
+    var line = 'M 0 0';
+    if (a.length == 6)
+    {
+        line += ' L ' + (a[0]*3*Math.sin(0.39269)) + ' ' + (a[0]*3*Math.cos(0.39269));
+        line += ' L 0 ' + (3*a[1]);
+        line += ' L ' + (a[2]*3*Math.sin(-0.39269)) + ' ' + (a[2]*3*Math.cos(-0.39269));
+        line += ' L 0 0'; 
+        line += ' L ' + (a[3]*3*Math.sin(-0.39269)) + ' -' + (a[3]*3*Math.cos(-0.39269));
+        line += ' L 0 -' + (3*a[4]);
+        line += ' L ' + (a[5]*3*Math.sin(0.39269)) + ' -' + (a[5]*3*Math.cos(0.39269));
+        line += ' Z';
+    } else if (a.length==8) {
+        line += ' L ' + (a[0]*3*Math.sin(4*Math.PI/8)) + ' ' + (a[0]*3*Math.cos(4*Math.PI/8));
+        line += ' L ' + (a[1]*3*Math.sin(3*Math.PI/8)) + ' ' + (a[1]*3*Math.cos(3*Math.PI/8));
+        line += ' L ' + (a[2]*3*Math.sin(2*Math.PI/8)) + ' ' + (a[2]*3*Math.cos(2*Math.PI/8));
+        line += ' L ' + (a[3]*3*Math.sin(1*Math.PI/8)) + ' ' + (a[3]*3*Math.cos(1*Math.PI/8));
+        line += ' L ' + (a[4]*3*Math.sin(0*Math.PI/8)) + ' ' + (a[4]*3*Math.cos(0*Math.PI/8));
+        line += ' L ' + (a[5]*3*Math.sin(-1*Math.PI/8)) + ' ' + (a[5]*3*Math.cos(-1*Math.PI/8));
+        line += ' L ' + (a[6]*3*Math.sin(-2*Math.PI/8)) + ' ' + (a[6]*3*Math.cos(-2*Math.PI/8));
+        line += ' L ' + (a[7]*3*Math.sin(-3*Math.PI/8)) + ' ' + (a[7]*3*Math.cos(-3*Math.PI/8));
+        line += ' L ' + (a[0]*3*Math.sin(-4*Math.PI/8)) + ' ' + (a[0]*3*Math.cos(-4*Math.PI/8));
+        line += ' L ' + (a[1]*3*Math.sin(-5*Math.PI/8)) + ' ' + (a[1]*3*Math.cos(-5*Math.PI/8));
+        line += ' L ' + (a[2]*3*Math.sin(-6*Math.PI/8)) + ' ' + (a[2]*3*Math.cos(-6*Math.PI/8));
+        line += ' L ' + (a[3]*3*Math.sin(-7*Math.PI/8)) + ' ' + (a[3]*3*Math.cos(-7*Math.PI/8));
+        line += ' L ' + (a[4]*3*Math.sin(-8*Math.PI/8)) + ' ' + (a[4]*3*Math.cos(-8*Math.PI/8));
+        line += ' L ' + (a[5]*3*Math.sin(-9*Math.PI/8)) + ' ' + (a[5]*3*Math.cos(-9*Math.PI/8));
+        line += ' L ' + (a[6]*3*Math.sin(-10*Math.PI/8)) + ' ' + (a[6]*3*Math.cos(-10*Math.PI/8));
+        line += ' L ' + (a[7]*3*Math.sin(-11*Math.PI/8)) + ' ' + (a[7]*3*Math.cos(-11*Math.PI/8));
+        line += ' Z';
+    }
+    else {
+        line = 'M 0 0 L -7.65 18.477 L 0 150 L 7.65 18.477 L 0 0 L -7.65 -18.477 L 0 -150 L 7.65 -18.477 Z';
+    }
+    return line;
+}
+
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+//    .style('background','rgb(128,128,255)')
+    .attr("width", width)
+    .attr("height", height);
+
+var barGroup = svg.append('svg:g')
+    .attr('id','full-group')
+    .attr('transform','translate(300,300)');
+
+var dirs = barGroup.selectAll('.dir-group')
+        .data(direcs)
+    .enter().append('svg:g')
+    .attr('class','dir-group')
+    .style('opacity','.3')
+    .attr('transform',function(d) { return 'rotate('+(parseFloat(d)-270+22.5)+')'; })
+    .on('mouseover',function(d) { 
+        d3.selectAll('.dir-group')
+            .filter(function(n){ return d == n}) 
+                .style('opacity','1');
+        })
+    .on('mouseout',function(d) { 
+        d3.selectAll('.dir-group')
+            .style('opacity','.3');
+        })
+
+dirs.append('svg:line')
+    .attr('class','orient-line')
+    .attr('x1',0)
+    .attr('x2',0)
+    .attr('y1',-height/3)
+    .attr('y2',height/3)
+    .style('stroke-dasharray','10,3')
+    .style('stroke','#000');
+
+var lineGroups = dirs.append('svg:g')
+    .attr('class','results-group');
+
+
+lineGroups.append('svg:path')
+    .attr('d',function(d,i) { return createLine(lineLevels[i]); })
+    .style('stroke','black')
+    .style('stroke-width','4px')
+    .style('fill','none');
+
+dirs.append('svg:path')
+    .attr('class','mean-line')
+    .attr('d',createLine([]))
+    .style('stroke','black')
+    .style('fill','none')
+    .style('stroke-width','4px')
+    .style('opacity','0');
+
+dirs.append('svg:g')
+    .attr('class','orient-key')
+    .attr('transform','translate(0,-'+height/3+')');
+
+var keys = d3.selectAll('.orient-key');
+keys.selectAll('.grating-bar').data([0,1,2,3,4]).enter().append('svg:rect')
+        .attr('width',4)
+        .attr('height',20)
+        .attr('x',function(d) { return -10+d*4;})
+        .attr('y',-25)
+        .style('fill',function(d,i) { return i%2==0 ? 'black' : 'white'; });
+    
+var up = function() {
+d3.selectAll('.dir-group')
+  .transition()
+      .delay(function(d,i) { return i * 500; })
+      .duration(500)
+    .attr('transform','rotate(0)');
+d3.selectAll('.results-group')
+  .transition()
+      .delay(4500)
+      .duration(500)
+      .style('opacity',.1)
+d3.selectAll('.mean-line')
+    .filter(function(d,i) { return i % 2 == 0; })
+  .transition()
+      .delay(4500)
+      .duration(500)
+      .style('opacity',1)
+};
+
+var down = function() {
+d3.selectAll('.mean-line')
+    .filter(function(d,i) { return i % 2 == 0; })
+  .transition()
+      .delay(0)
+      .duration(500)
+      .style('opacity',0)
+d3.selectAll('.results-group')
+  .transition()
+      .delay(0)
+      .duration(500)
+      .style('opacity',1)
+
+d3.selectAll('.dir-group')
+  .transition()
+//      .delay(function(d,i) { return i * 500; })
+      .delay(500)
+      .duration(500)
+    .attr('transform',function(d) { return 'rotate('+(parseFloat(d)-270+22.5)+')'; });
+    //.attr('transform','rotate(0)');
+};
+      </script>
+    </div>
+  </body>
+</html>
