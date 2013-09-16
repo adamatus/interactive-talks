@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div id="body">
+      <div id="header">
+          Importance Maps
+      </div>
+      <div id="chart">
+      </div>
+      <script type="text/javascript">
+
+var width = 800;
+    height = 600;
+
+var margins = [100, 100, 10, 100], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([0,5]);
+var y = d3.scale.linear().range([h, 0]).domain([0,5]);
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .attr("width", width)
+    .attr("height", height);
+
+var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+var myd;
+
+        d3.csv('data/play.csv',function(d) { 
+            console.log('Done reading logreg'); 
+            d.forEach(function(data) {
+                console.log(data);
+                });
+            myd = d;
+
+            plot.selectAll('rect').data([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]).enter().append('svg:rect')
+                .attr('height',(y(0)-y(1)))
+                .attr('width',(x(1)-x(0)))
+                .attr('fill',function(d,i) { return "rgb("+Math.round(255/25*i)+",255,255)"; } )
+                .attr('x',function(d,i) { return ((i+1)%5)*(x(1)-x(0)); })
+                .attr('y',function(d,i) { return Math.floor(i/5)*(y(0)-y(1)); })
+            } );
+     
+      </script>
+    </div>
+  </body>
+</html>
