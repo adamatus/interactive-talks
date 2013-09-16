@@ -1,4 +1,6 @@
-interactive-talks
-=================
+Embodiment and Language Comprehension Talk
+==========================================
 
-A framework for interactive web-based talks using D3.js
+A web-based talk for Psych 733: Sentence and Word Comprehension 
+about embodiment and language comprehension focusing on a couple of papers we
+read for class.
