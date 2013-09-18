@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/button.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="js/d3.v2.min.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Experiment 1 GLM Results</h1>
+      </div>
+      <div id="controls" style="text-align: center">
+          <span id="where"><button class="first active" style='font-size: 24px;'>Sample</button><button class="last" style='font-size: 24px;'>Delay</button></span>
+      </div>
+      <div id="content-frame" class=''>
+          <div id="content">
+              <!--<img src="media/motionWM_glm.png" class='wide'>-->
+              <img src="media/surf_results_lh_sample_lat_trim.png" style="width: 350px; height: auto; position: absolute; top: 90px; left: 90px; opacity: 1;" class='sample'>
+              <img src="media/surf_results_rh_sample_lat_trim.png" style="width: 350px; height: auto; position: absolute; top: 90px; left: 520px; opacity: 1;" class='sample'>
+              <img src="media/surf_results_lh_sample_med_trim.png" style="width: 350px; height: auto; position: absolute; top: 360px; left: 90px; opacity: 1;" class='sample'>
+              <img src="media/surf_results_rh_sample_med_trim.png" style="width: 350px; height: auto; position: absolute; top: 370px; left: 520px; opacity: 1;" class='sample'>
+              <img src="media/surf_results_lh_delay_lat_trim.png" style="width: 350px; height: auto; position: absolute; top: 90px; left: 90px; opacity: 0;" class='delay'>
+              <img src="media/surf_results_rh_delay_lat_trim.png" style="width: 350px; height: auto; position: absolute; top: 90px; left: 520px; opacity: 0;" class='delay'>
+              <img src="media/surf_results_lh_delay_med_trim.png" style="width: 350px; height: auto; position: absolute; top: 360px; left: 90px; opacity: 0;" class='delay'>
+              <img src="media/surf_results_rh_delay_med_trim.png" style="width: 350px; height: auto; position: absolute; top: 370px; left: 520px; opacity: 0;" class='delay'>
+          </div>
+      </div>
+      <div id="footer">
+          <h2>Riggall &amp; Postle (2012) J Neurosci</h2>
+      </div>
+      <script type="text/javascript">
+d3.selectAll('button')
+    .data(['sample','delay'])
+    .on("click",function(w) {
+            if (w == 'sample')
+            {
+               // d3.selectAll('.sample').transition().delay(0).duration(500).ease('linear').style('opacity',1);
+                d3.selectAll('.delay').transition().delay(0).duration(1000).ease('linear').style('opacity',0);
+            } else {
+               // d3.selectAll('.sample').transition().delay(0).duration(500).ease('linear').style('opacity',0);
+                d3.selectAll('.delay').transition().delay(0).duration(1000).ease('linear').style('opacity',1);
+            }
+            d3.selectAll('button')
+                .classed('active',function(d) { return d == w; });
+                });
+
+      </script>
+    </div>
+  </body>
+</html>

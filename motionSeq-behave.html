@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="js/d3.v2.min.js"></script>
+    <script type="text/javascript">
+var show1 = false;
+var down = function() {
+    if (show1 == false)
+    {
+        d3.select('#cover1').style('display','none');
+        show1 = true;
+    } else {
+        d3.select('#cover2').style('display','none');
+    }
+};
+</script>
+
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Experiment 2 Behavioral Results</h1>
+      </div>
+      <div id="content-frame" class=''>
+          <div id="content">
+              <img src="media/bays_hussain.png" class='wide'>
+              <img src="media/motionSeq_behave.png" class='wide'>
+              <img src='media/cover.png' id='cover1' style='position: absolute; height: 300px; width: 620px; top: 350px; left: 0px;'>
+              <img src='media/cover.png' id='cover2' style='position: absolute; height: 300px; width: 330px; top: 350px; left: 620px;'>
+          </div>
+      </div>
+      <div id="footer">
+          <h2></h2>
+      </div>
+    </div>
+  </body>
+</html>

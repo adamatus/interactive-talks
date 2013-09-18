@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="js/d3.v2.min.js"></script>
+    <script type="text/javascript">
+var appear = function() {
+    d3.select('#steve').transition().duration(1500).style('opacity',1);
+};
+
+var up = function() {
+    appear();
+};
+
+var down = function() {
+    appear();
+};
+    </script>
+  </head>
+  <body>
+    <div id="body">
+      <div id="content-frame" class='with-neither'>
+        <div id="content" class='with-neither'>
+            <h1>Searching for stimulus identity<br />in load-sensitive BOLD activity</h1>
+            <h2>Adam C. Riggall &amp; Bradley R. Postle <br /> <span id='steve' style='opacity: 0;'>&amp; Stephen Emrich</span></h2>
+          <img src='media/wisc_logo.png'>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
