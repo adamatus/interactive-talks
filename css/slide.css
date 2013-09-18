@@ -2,24 +2,46 @@ html {
     cursor: crosshair;
 }
 
+h1, h2, h3, h4, h5, p {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
 body {
   overflow: hidden;
   margin: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 1000px;
   font-size: 16px;
   font-family: "Helvetica Neue", Helvetica;
 }
 
 body.inverted {
-    background-color: #000;
+    background-color: rgb(0,0,0);
 }
 
-img {
-    margin: 1em;
+img { 
+    display: inline;
+    vertical-align: middle;
 }
 
 img.tall {
-    height: 95%;
+    height: 628px;
     width: auto;
+}
+
+.with-only-head div img.tall {
+    height: 648px;
+}
+
+.with-only-foot div img.tall {
+    height: 668px;
+}
+
+.with-neither div img.tall {
+    height: 720px;
 }
 
 img.wide {
@@ -35,40 +57,87 @@ img.wide {
     z-index: -1;
 }
 
-ul {
-    margin: 0;
-    padding: 0;
-}
-
-li {
-    padding-top: .5em;
-    padding-bottom: .5em;
-}
-
-
-.nodots {
-    list-style-type: none;
-}
-
-#chart, #header, #content, #footer {
+#header, #content-frame, #footer {
   z-index: 1;
   position: absolute;
-  top: 0;
-  width: 928px;
-  padding-left: 36px;
-  padding-right: 36px;
-}
-
-#header, #content {
+  width: 960px; /*1000-sum(padding-left+padding-right) */
   display: block;
-  font-size: 36px;
-  text-shadow: 0 1px 0 #fff;
 }
 
 #header {
-    padding-top: 18px;
-    padding-bottom: 18px;
+  top: 0px;
+}
+
+#content-frame {
+    top: 67px; 
+    display: table;
+    height: 628px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
+    z-index: 0;
+}
+
+#content {
+    width: 960px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 22px;
+}
+
+#content.top {
+    vertical-align: top;
+}
+
+#content.bottom {
+    vertical-align: bottom;
+}
+
+#content.left {
+    text-align: left;
+}
+
+#content.right {
+    text-align: right;
+}
+
+
+#content-frame.with-only-head {
+    height: 677px;
+}
+
+#content-frame.with-only-foot {
+    height: 695px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
+    top: 0; 
+}
+
+#content-frame.with-neither {
+    top: 0px; 
+    height: 744px; /*744- sum(heading:padding-top,font-size,padding-bottom)*/
+}
+
+#content-frame.with-neither {
+}
+
+#footer {
+  top: 695px; /*744-sum(footer_h2:padding-top,font-size,padding-bottom) */
+}
+
+#header h1 {
+    padding-top: 15px;
+    padding-bottom: 15px;
     font-weight: bold; 
+    font-size: 30px;
+    text-shadow: 1px 1px 2px #bbb;
+}
+
+#footer h2 {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  font-size: 22px;
+  font-weight: 300;
+  text-shadow: 0 1px 0 #ccc; 
+  font-style: italic;
+  color: #666;
+  text-align: right;
 }
 
 #header.inverted, #footer.inverted {
@@ -76,71 +145,47 @@ li {
   text-shadow: 0 1px 4px #000;
 }
 
-.center {
-    text-align: center;
+#content h1 {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    font-size: 48px;
+    text-shadow: 1px 1px 2px #bbb;
+    line-height: 1.5em;
 }
 
-#chart, #content {
-    z-index: 0;
-    top: 80px; 
+#content h2 {
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 0em;
+    padding-bottom: 2em;
+    text-shadow: 1px 1px 2px #bbb;
 }
 
-#chart {
-    width: 928px;
-    height: 500px;
+#content h3,h4 {
+    padding: 2em;
 }
 
-#footer {
-  font-size: 24px;
-  font-weight: 300;
-  text-shadow: 0 1px 0 #fff;
-  top: 712px;
-  text-align: right;
-  padding-top: 18px;
+ul {
+    text-align: left;
+    list-style-position:inside;
+    margin-top: .5em;
+    margin-bottom: .5em;
 }
 
-#footer p {
-    margin: 0;
-    padding: 0;
+ul ul {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-pre {
-  font-size: 18px;
+li {
+    padding-bottom: 1em;
 }
 
-line {
-  stroke: #000;
-  stroke-width: 1.5px;
-}
 
-.string, .regexp {
-  color: #f39;
-}
-
-.keyword {
-  color: #00c;
-}
-
-.comment {
-  color: #777;
-  font-style: oblique;
-}
-
-.number {
-  color: #369;
-}
-
-.class, .special {
-  color: #1181B8;
-}
-
-a:link, a:visited {
-  color: #000;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #666;
+.nodots {
+    list-style-type: none;
 }
 
 .one-column {
@@ -164,25 +209,14 @@ a:hover {
     padding-bottom: 28px;
 }
 
-.hint {
-  position: absolute;
-  right: 0;
-  width: 1280px;
-  font-size: 12px;
-  color: #999;
-}
-
-h2 {
-    text-align: center;
-}
-
 #controls {
-    padding-top: 80px;
-    padding-left: 64px;
+    padding-top: 0px;
+    padding-left: 0px;
     text-indent: 0;
     text-align: left;
-    width: 872px;
-    position: relative;
+    width: 960px;
+    position: absolute;
+    top: 80px;
     z-index: 3;
 }
 

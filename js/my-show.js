@@ -1,8 +1,8 @@
-d3.select("body").selectAll(".slide")
+d3.select("body").selectAll(".slide-frame")
     .data(slides)
   .enter().append("div")
     .attr('id',function(d,i) {return 'frame-'+i; })
-    .attr('class','slide')
+    .attr('class','slide-frame')
     .append("iframe")
       .attr("src",function(d) {return d.loc;});
 
@@ -78,7 +78,6 @@ d3.select(window).on("keydown", function() {
 });
 
 function resize() {
-    console.log(window.innerHeight);
   d3.select("body").style("margin-top", (window.innerHeight - 768) / 2 + "px");
 }
 
