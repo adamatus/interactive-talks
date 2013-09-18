@@ -1,9 +1,8 @@
 
 svg {
   display: inline;
-  font-size: 18px;
+  font-size: 24px;
   font-family: "Helvetica Neue", Helvetica;
-  background-color: rgba(128,256,128,.5);
 }
 
 .rule line {
@@ -44,10 +43,12 @@ text.yAxis {
 
 .x.axis line {
   stroke: #000;
+  stroke-width: 3px;
 }
 
 .x.axis line.tick {
     stroke: none;
+  stroke-width: 3px;
 }
 
 .bars {
@@ -70,6 +71,7 @@ text.yAxis {
 .y.axis line, .y.axis path {
   fill: none;
   stroke: #000;
+  stroke-width: 3px;
 }
 
 .y.grid text, .y.grid path {

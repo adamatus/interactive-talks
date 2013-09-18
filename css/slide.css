@@ -22,9 +22,26 @@ body.inverted {
     background-color: rgb(0,0,0);
 }
 
+img { 
+    display: inline;
+    vertical-align: middle;
+}
+
 img.tall {
-    height: 100%;
+    height: 628px;
     width: auto;
+}
+
+.with-only-head div img.tall {
+    height: 648px;
+}
+
+.with-only-foot div img.tall {
+    height: 668px;
+}
+
+.with-neither div img.tall {
+    height: 720px;
 }
 
 img.wide {
@@ -52,29 +69,10 @@ img.wide {
 }
 
 #content-frame {
-    top: 60px; 
-    height: 640px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
+    top: 67px; 
     display: table;
-}
-
-#content.with-head {
-    height: 684px;
-}
-
-#content-frame.with-foot {
-    top: 0; 
-}
-
-#content.with-foot {
-    height: 700px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
-}
-
-#content-frame.with-neither {
-    top: 0px; 
-}
-
-#content-frame.with-neither {
-    height: 744px; /*744- sum(heading:padding-top,font-size,padding-bottom)*/
+    height: 628px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
+    z-index: 0;
 }
 
 #content {
@@ -99,6 +97,24 @@ img.wide {
 
 #content.right {
     text-align: right;
+}
+
+
+#content-frame.with-only-head {
+    height: 677px;
+}
+
+#content-frame.with-only-foot {
+    height: 695px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
+    top: 0; 
+}
+
+#content-frame.with-neither {
+    top: 0px; 
+    height: 744px; /*744- sum(heading:padding-top,font-size,padding-bottom)*/
+}
+
+#content-frame.with-neither {
 }
 
 #footer {
@@ -130,14 +146,20 @@ img.wide {
 }
 
 #content h1 {
-    padding: 2em;
-    font-size: 36px;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    font-size: 48px;
     text-shadow: 1px 1px 2px #bbb;
     line-height: 1.5em;
 }
 
 #content h2 {
-    padding: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-top: 0em;
+    padding-bottom: 2em;
     text-shadow: 1px 1px 2px #bbb;
 }
 
@@ -188,12 +210,14 @@ li {
 }
 
 #controls {
-    padding-top: 80px;
-    padding-left: 64px;
+    padding-top: 0px;
+    padding-left: 0px;
     text-indent: 0;
     text-align: left;
-    width: 872px;
-    position: relative;
+    width: 960px;
+    position: absolute;
+    top: 80px;
+    z-index: 3;
 }
 
 #ccontrols {
