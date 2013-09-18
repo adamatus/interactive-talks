@@ -10,7 +10,7 @@ body {
 }
 
 body.inverted {
-    background-color: rgb(128,128,128);
+    background-color: #000;
 }
 
 img {
@@ -18,12 +18,12 @@ img {
 }
 
 img.tall {
-    height: 90%;
+    height: 95%;
     width: auto;
 }
 
 img.wide {
-    width: 95%;
+    width: 100%;
     height: auto;
 }
 
@@ -55,19 +55,19 @@ li {
   position: absolute;
   top: 0;
   width: 928px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 36px;
+  padding-right: 36px;
 }
 
 #header, #content {
   display: block;
-  font-size: 30px;
-  text-shadow: 1px 1px 2px #bbb;
+  font-size: 36px;
+  text-shadow: 0 1px 0 #fff;
 }
 
 #header {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 18px;
+    padding-bottom: 18px;
     font-weight: bold; 
 }
 
@@ -91,17 +91,12 @@ li {
 }
 
 #footer {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 300;
-  text-shadow: 0 1px 0 #ccc; 
-  font-style: italic;
-  top: 685px;
+  text-shadow: 0 1px 0 #fff;
+  top: 712px;
   text-align: right;
   padding-top: 18px;
-  padding-right: 0px;
-  margin-right: -20px;
-  width: 952px;
-  color: #666;
 }
 
 #footer p {
@@ -188,6 +183,7 @@ h2 {
     text-align: left;
     width: 872px;
     position: relative;
+    z-index: 3;
 }
 
 #ccontrols {
