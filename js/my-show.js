@@ -81,6 +81,26 @@ function resize() {
   d3.select("body").style("margin-top", (window.innerHeight - 768) / 2 + "px");
 }
 
+function navigateToEnd()
+{
+    navigateTo(slides.length-1);
+}
+
+function navigateToStart()
+{
+    navigateTo(0);
+}
+
+function navigateForward()
+{
+    navigateTo(curIndex + 1);
+}
+
+function navigateBack()
+{
+    navigateTo(curIndex - 1);
+}
+
 function navigateTo(slide)
 {
     slide = Number(slide);
@@ -106,6 +126,7 @@ function navigateTo(slide)
     }
 
     document.getElementById("navigator").selectedIndex = curIndex;
+    document.getElementById('active').contentWindow.focus();
 
     location.hash = curIndex;
     d3.selectAll("#menu").style("display", "none");
