@@ -2,18 +2,22 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
     <link type="text/css" rel="stylesheet" href="css/charts.css">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
   </head>
   <body>
-    <div id="body">
+    <div id="slide">
       <div id="header">
-         A page with a chart
+         <h1>A page with a chart</h1>
       </div>
-      <div id="chart">
-      </div>
-      <script type="text/javascript">
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <!-- Insert chart here -->
+        <div id="chart">
+        </div>
+        <script type="text/javascript">
 var data = [{year: 2006, books: 54},
             {year: 2007, books: 43},
             {year: 2008, books: 41},
@@ -95,7 +99,8 @@ barDemo.selectAll("text.yAxis").
   }
 
 
-      </script>
+        </script>
+      </div>
     </div>
   </body>
 </html>

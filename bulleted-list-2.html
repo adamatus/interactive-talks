@@ -2,35 +2,38 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
   </head>
   <body>
-    <div id="body">
+    <div id="slide">
       <div id="header">
-          This is a page with a bulleted list
+        <h1>This is a page with a bulleted list</h1>
       </div>
-      <div id="content">
-          <div id="column-1" class="two-column">
+      <div id="content-frame" class='with-only-head'>
+        <div id="column-1" class="two-column">
+          <ul>
+            <li>List item 1</li>
+            <li>List item 2</li>
+            <li>Nest list introduction</li>
             <ul>
-                <li>List item 1</li>
-                <li>List item 2</li>
-                <li>Nest list introduction</li>
-                <ul>
-                    <li>Nested list 1</li>
-                </ul>
+              <li>Nested list 1</li>
             </ul>
-          </div>
-          <div id="column-2" class="two-column">
+          </ul>
+        </div>
+        <div id="column-2" class="two-column">
+          <ul>
+            <li>List item 1</li>
+            <li>List item 2</li>
+            <li>Nest list introduction</li>
             <ul>
-                <li>List item 1</li>
-                <li>List item 2</li>
-                <li>Nest list introduction</li>
-                <ul>
-                    <li>Nested list 1</li>
-                </ul>
+              <li>Nested list 1</li>
             </ul>
-          </div>
+          </ul>
+        </div>
       </div>
+    </div>
    </div>
   </body>
 </html>
