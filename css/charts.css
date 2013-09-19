@@ -1,86 +1,50 @@
-
 svg {
   display: inline;
   font-size: 24px;
   font-family: "Helvetica Neue", Helvetica;
-}
-
-.rule line {
-  stroke: #fff;
-  stroke-opacity: .2;
-  shape-rendering: crispEdges;
-}
-
-.rule:first-child line {
-  stroke: #000;
-  stroke-opacity: 1;
+/*  background-color: rgba(0,255,0,.5); */
 }
 
 rect {
-  fill-opacity: .6;
-  box-shadow: 10px 10px 5px #000;
+/*  fill-opacity: .6; 
+  box-shadow: 10px 10px 5px #000; */
 }
 
 text {
     text-anchor: middle;
 }
 
-text.yAxis {
-  color: black;
-  fill: black;
-  text-shadow: 0 1px 0 #FFF;
+path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 5px;
 }
 
-.dot {
-    stroke: #FFF;
-    stroke-opacity: 1;
-    fill: #FFF;
+path.dashed {
+    stroke-dasharray: 10,10;
 }
 
-.axis, .grid {
+.axis {
   shape-rendering: crispEdges;
 }
 
-.x.axis line {
+.axis.x path,
+.axis.y path {
   stroke: #000;
   stroke-width: 3px;
 }
 
-.x.axis line.tick {
-    stroke: none;
-  stroke-width: 3px;
+.axis.x text {
+    text-anchor:middle; 
+    font-size: .85em;
 }
 
-.bars {
-    fill: steelblue;
-    stroke: #777;
+.axis.y text {
+    text-anchor:end; 
 }
 
-.x.axis .minor {
-  stroke-opacity: .5;
-}
-
-.x.axis path {
-  display: none;
-}
-
-.y.axis text {
-    text-anchor: end;
-}
-
-.y.axis line, .y.axis path {
-  fill: none;
+.x .tick,
+.y .tick {
   stroke: #000;
   stroke-width: 3px;
-}
-
-.y.grid text, .y.grid path {
-    fill: none;
-    stroke: none;
-}
-
-.y.grid line {
-    fill: none;
-    stroke: #000;
-    stroke-opacity: .2;
 }
