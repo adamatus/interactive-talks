@@ -3,28 +3,52 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <style>
+        #content h1 {
+            font-size: 42px;
+            padding-left: 1em;
+            padding-right: 1em;
+            padding-top: 0;
+        }
+        #content h2 {
+            font-size: 28px;
+            padding-top: 2em;
+        }
+    </style>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
     <script type="text/javascript">
-var appear = function() {
-    d3.select('#steve').transition().duration(1500).style('opacity',1);
-};
-
 var up = function() {
-    appear();
+    d3.select('#beer').transition().duration(1000).ease('elastic')
+        .style('width','0px')
+        .style('height','0px')
+        .style('margin-left','0px')
+        .style('margin-top','0px');
 };
 
 var down = function() {
-    appear();
+    d3.select('#beer').transition().duration(1000).ease('elastic')
+        .style('width','500px')
+        .style('height','500px')
+        .style('margin-left','-250px')
+        .style('margin-top','-250px');
 };
     </script>
   </head>
   <body>
-    <div id="body">
+    <div id="slide">
       <div id="content-frame" class='with-neither'>
         <div id="content" class='with-neither'>
-            <h1>Searching for stimulus identity<br />in load-sensitive BOLD activity</h1>
-            <h2>Adam C. Riggall &amp; Bradley R. Postle <br /> <span id='steve' style='opacity: 0;'>&amp; Stephen Emrich</span></h2>
-          <img src='media/wisc_logo.png'>
+            <h1>Searching for stimulus<br/> identity with fMRI
+                classification:<br />
+                What do patterns of BOLD activity<br />really tell us about short-term storage?</h1>
+            <h2>Adam Riggall<br />HAMLET<br /><span style="color:red;
+                    text-decoration: line-through;">10/26/2012</span><br />11/30/12</h2>
+            <div>
+                <img src='media/postlab_text.png' style="width:250px; height: auto; padding-right: 50px;">
+                <img src='media/postlab_logo.png' style="width:200px; height: auto; padding-left: 50px;">
+                <img id='beer' src='media/beer-blackened-voodoo-framed.png' style="width:0px; height: 0px; position:absolute; top:50%; left:50%; margin-left:0px; margin-top: 0px; opacity: 1;">
+            </div>
         </div>
       </div>
     </div>

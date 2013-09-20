@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+    <script type="text/javascript" src="data/precision-by-sub.js"></script>
+    <script type="text/javascript">
+var up = function() {
+    d3.selectAll('.nums').transition().duration(500).style('opacity',1);
+    d3.selectAll('.dots').transition().duration(500).style('opacity',0);
+};
+var down = function() {
+    d3.selectAll('.nums').transition().duration(500).style('opacity',0);
+    d3.selectAll('.dots').transition().duration(500).style('opacity',1);
+};
+    
+    </script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1></h1>
+      </div>
+      <div id="content-frame" class='with-neither'>
+          <div id="content">
+              <div id="chart">
+                  <!-- Plot gets inserted in here -->
+              </div>
+          </div>
+      </div>
+      <div id="footer">
+          <h2></h2>
+      </div>
+    </div>
+      <script type="text/javascript">
+
+var width = 900;
+    height = 650;
+
+var margins = [80, 100, 100, 30], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([8,80]);
+var y = d3.scale.linear().range([h, 0]).domain([0.45,0.90]);
+var xAxis = d3.svg.axis().scale(x).ticks(8);
+var yAxis = d3.svg.axis().scale(y).ticks(8).orient("left");
+
+var cols = ['#A6CEE3','#1F78B4','#B2DF8A','#33A02C','#FB9A99','#E31A1C','#FDBF6F','#FF7F00','#CAB2D6','#6A3D9A'];
+
+var bar_width = 100;
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .attr("width", width)
+    .attr("height", height);
+
+var line = function() {};
+    line = d3.svg.line()
+        //.interpolate('monotone')
+        .interpolate('linear')
+        .x(function(d) { return x(d.x); }) 
+        .y(function(d) { return y(d.y); });
+
+var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+var dataRegion = plot.append('g').attr('id','data-region');
+
+// Add y-axis
+plot.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+plot.select('.y.axis').append('svg:text')
+    .attr('id','ylab')
+    .text('Peak classifier direction sensitivity')
+    .style('text-anchor','middle')
+    .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+// Add x-axis
+plot.append("g")
+    .attr("class", "x axis")
+    .attr('transform','translate(0,'+h+') ')
+    .call(xAxis);
+plot.select('.x.axis').append('svg:text')
+    .attr('id','ylab')
+    .text('Precision (concentration K)')
+    .style('text-anchor','middle')
+    .attr('transform','translate('+(w/2)+',70) ');
+
+var subGroup = dataRegion.selectAll('.sub')
+        .data(subs)
+    .enter().append('svg:g')
+    .classed('sub',true)
+    .on('mouseover', function(d,i) {
+            d3.selectAll('.sub')
+                .filter(function(d,j) { return i != j; })
+                .transition().duration(500)
+                .style('opacity',.15);
+            d3.selectAll('.sub')
+                .filter(function(d,j) { return i == j; })
+                .transition().duration(500)
+                .style('opacity',1)
+                })
+    .on('mouseout', function(d,i) {
+            d3.selectAll('.sub')
+                .transition().duration(500)
+                .style('opacity',1);
+                });
+
+subGroup.append('svg:path')
+    .classed('data-line',true)
+    .style('fill','none')
+    .style('stroke-width',7)
+    .style('stroke-linecap','round')
+    .style('stroke',function(d,i) { return cols[i]; })
+    .attr('d',function(d) { return line(d.lines); });
+
+var points = subGroup.append('svg:g')
+    .style('fill',function(d,i) { return cols[i]; })
+        .classed('points',true);
+
+d3.selectAll('.points').selectAll('.nums')
+        .data(function(d) { return d.points; })
+    .enter().append('svg:text')
+    .classed('nums',true)
+    .text(function(d,i) { return 3-i; })
+    .attr('x',function(d) { return x(d.x); })
+    .attr('y',function(d) { return y(d.y); })
+    .style('opacity',0)
+    .attr('dy',9);
+
+d3.selectAll('.points').selectAll('.dots')
+        .data(function(d) { return d.points; })
+    .enter().append('svg:circle')
+    .classed('dots',true)
+    .attr('r',9)
+    .attr('cx',function(d) { return x(d.x); })
+    .attr('cy',function(d) { return y(d.y); });
+
+    </script>
+  </body>
+</html>

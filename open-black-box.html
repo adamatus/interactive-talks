@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+    <script type="text/javascript">
+var up = function() {
+    d3.select('#beer').transition().duration(1000).ease('elastic')
+        .style('width','0px')
+        .style('height','0px')
+        .style('margin-left','0px')
+        .style('margin-top','0px');
+};
+
+var down = function() {
+    d3.select('#beer').transition().duration(1000).ease('elastic')
+        .style('width','500px')
+        .style('height','500px')
+        .style('margin-left','-250px')
+        .style('margin-top','-250px');
+};
+    </script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1></h1>
+      </div>
+      <div id="content-frame" class='with-neither'>
+          <div id="content">
+              <h1>What happens when we look inside the black box?</h1>
+              <img id='beer' src='media/beer-blind-faith-framed.png' style="width:0px; height: 0px; position:absolute; top:50%; left:50%; margin-left:0px; margin-top: 0px; opacity: 1;">
+          </div>
+      </div>
+    </div>
+  </body>
+</html>

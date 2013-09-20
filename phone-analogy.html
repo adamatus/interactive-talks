@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+    <script type="text/javascript" src="js/step-counter.js"></script>
+    <script type="text/javascript">
+
+var step = 0;
+var steps = 4;
+
+// Setup step-counter
+var size = 25;
+var cir = d3.scale.linear().range([0,size/2]).domain([steps,0]);
+
+var update = function() {
+    // Step-wise addition of images
+    d3.selectAll('img').filter(function(d,i) { return i <= step; }).transition().duration(1000).style('opacity',1);
+    d3.selectAll('img').filter(function(d,i) { return i > step; }).transition().duration(1000).style('opacity',0);
+};
+
+var down = function() {
+    step = step < steps ? step+1 : steps;
+    update_counter(step,cir);
+    update();
+};
+
+var up = function() {
+    step = step > 0 ? step-1 : 0;
+    update_counter(step,cir);
+    update();
+};
+
+    </script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="content-frame" class=''>
+          <div id="content">
+              <img src="media/pizza_box.jpg" style="width: 300px; height: auto; opacity: 1; padding-right: 50px;"><br/>
+              <img src="media/yellow-book.jpg" style="width: 300px; height: auto; opacity: 0; padding-right: 50px;">
+              <img src="media/rotary-phone.jpg" style="width: 300px; height: auto; opacity: 0; padding-left: 50px;">
+              <img src="media/cross.png" style="width: 600px; height: auto; opacity: 0; padding-left: 50px; position: absolute; top: 25px; left: 125px;">
+              <img src="media/iphone.png" style="width: 250px; height: auto; opacity: 0; padding-left: 50px; position: absolute; top: 100px; left: 300px;">
+              <script>
+                  insert_step_counter(size);
+              </script>
+          </div>
+        </div>
+     </div>
+  </body>
+</html>

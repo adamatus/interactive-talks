@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+    <script type="text/javascript">
+var step = 0;
+var maxStep = 2;
+var going_up = false;
+
+var update = function() {
+    if (step == 0) {
+        d3.select('#cover1').transition().duration(1000).style('opacity',1);
+        d3.select('#cover2').transition().duration(1000).style('opacity',1);
+    } else if (step == 1) {
+        d3.select('#cover1').transition().duration(1000).style('opacity',0);
+        d3.select('#cover2').transition().duration(1000).style('opacity',1);
+        if (going_up == true) {
+            d3.select('#footer h2').transition().duration(500).style('opacity',0);
+        }
+        d3.select('#footer h2').transition().duration(500).delay(500).style('opacity',1).text('Wajima & Sawaguchi (2004) Neurosci Res');
+    } else {
+        d3.select('#cover1').transition().duration(1000).style('opacity',0);
+        d3.select('#cover2').transition().duration(1000).style('opacity',0);
+        d3.select('#footer h2').transition().duration(500).style('opacity',0);
+        d3.select('#footer h2').transition().duration(500).delay(500).style('opacity',1).text('Tsujimoto & Postle (2012) JOCN');
+    }
+}
+
+var down = function() {
+    step = step < maxStep ? step+1 : maxStep;
+    going_up = false;
+    update();
+}
+
+var up = function() {
+    step = step > 0 ? step-1 : 0;
+    going_up = true;
+    update();
+}
+</script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1></h1>
+      </div>
+      <div id="content-frame" class='with-only-foot'>
+          <div id="content">
+              <img src='media/mnemonic-scotoma.png' class='tall'>
+              <img id='cover1' src='media/cover.png' style='position: absolute; top: 0px; left: 275px; height: 650px; width: 300px'>
+              <img id='cover2' src='media/cover.png' style='position: absolute; top: 0px; left: 570px; height: 700px; width: 405px'>
+          </div>
+      </div>
+      <div id="footer">
+          <h2>Wajima &amp; Sawaguchi (2004) Neurosci Res</h2>
+          <!--<h2>Tsujimoto &amp; Postle (2012) JOCN</h2> -->
+      </div>
+    </div>
+  </body>
+</html>

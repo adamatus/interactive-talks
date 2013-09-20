@@ -1,22 +1,238 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
     <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <link type="text/css" rel="stylesheet" href="css/button.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
   </head>
   <body>
     <div id="slide">
       <div id="header">
-          <h1>Experiment 2 Decoding Results</h1>
+          <h1></h1>
       </div>
-      <div id="content-frame" class=''>
+      <div id="content-frame" class='with-neither'>
           <div id="content">
-              <img src="media/motionSeq_decoding.png" class='wide'>
+              <span id="who">
+                  <button class="first active">Sample</button><button class="last">Delay</button>
+              </span>
+              <div id="chart">
+                  <!-- Plot gets inserted in here -->
+              </div>
           </div>
       </div>
       <div id="footer">
           <h2></h2>
       </div>
+      <script type="text/javascript">
+
+var width = 900;
+    height = 600;
+
+var margins = [80, 100, 50, 30], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([0,12]);
+var y = d3.scale.linear().range([h, 0]).domain([.40,.75]);
+var yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
+
+var bar_width = 100;
+
+var cols = ['#FF0000','#666666','#FFAA00','#1A9641','#AAFF00','#E66101','#00FF00','#00FF55','#00FFAA','#E66101','#00AAFF','#5E3C99','#0000FF','#5500FF','#AA00FF','#FF00FF','#FF00AA','#FF0055'];
+
+var samples = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.495790667,0.484566333,0.482979333,0.505952667,0.507098,0.485128667,0.472606667,0.481277667,0.482918,0.502014,0.505713333,0.486837667,0.462201333],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.504989333,0.490919667,0.515844333,0.578334667,0.585254667,0.538423667,0.517090667,0.552737,0.590358333,0.608953333,0.536046667,0.482413667,0.461338333],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.507367333,0.506214667,0.502124333,0.527157,0.606518,0.611841667,0.578191667,0.561483667,0.535687333,0.521538667,0.531021667,0.513691667,0.471434],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0]];
+
+var delays = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.491977667,0.477284667,0.497185,0.511622333,0.498795,0.495151667,0.483604667,0.489632667,0.496615333,0.527279333,0.516267333,0.502797,0.491497333],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.510758333,0.497107333,0.481478333,0.503616333,0.511644,0.491923667,0.505340667,0.519817667,0.511296333,0.526998333,0.516707333,0.496063333,0.478146333],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0.495362,0.494217,0.498403,0.510239333,0.508951667,0.519371,0.529891333,0.531526333,0.550650667,0.557908333,0.52095,0.511835,0.48813],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0]];
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .attr("width", width)
+    .attr("height", height);
+
+var line = function() {};
+    line = d3.svg.line()
+        //.interpolate('monotone')
+        .interpolate('linear')
+        .x(function(d,i) { return x(i); }) 
+        .y(function(d) { return y(d); });
+
+    var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+    var dataRegion = plot.append('g').attr('id','data-region');
+
+
+    var trs = dataRegion.selectAll('.tr')
+            .data(samples)
+        .enter().append('svg:g')
+                .style('opacity',0)
+                .classed('tr',true);
+
+    trs.append('svg:path')
+                    .classed('data-line',true)
+                   .style('fill','none')
+                    .style('stroke-width',6)
+                    .style('stroke',function(d,i) { return cols[i]; })
+                    .attr('d',function(d,i) { return line(samples[i]); });
+
+    // X-axis bounding boxes
+    trs.append('svg:rect')
+            .style('fill',function(d,i) { return cols[i]; })
+            .classed('bg',true)
+            .attr('width',(x(1)-x(0)))
+            .attr('height',h)
+            .style('opacity',.5)
+            .style('z-index',-5)
+            .attr('x',function(d,i) { return x(i-.5); })
+            .attr('y',function(d) { return y(.75); });
+
+var box = plot.selectAll('g.box')
+    .data([-2,0,2,4,6,8,10,12,14,16,18,20,22])
+.enter().append('svg:g')
+    .classed('box',true);
+
+    box.append('svg:rect')
+            .style('fill','black')
+            .style('stroke','black')
+            .classed('left-wall',true)
+            .attr('width',2)
+            .attr('height',10)
+            .attr('x',function(d,i) { return x(i); })
+            .attr('y',function(d) { return y(.40); });
+
+    box.append('svg:text')
+            .text(function(d,i) { return d; })
+            .attr('x',function(d,i) { return x(i); })
+            .attr('y',function(d) { return y(.40)+32; })
+                .on('click',function(d,i) { toggle(i+1);});
+                    
+    // Add y-axis
+    plot.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab')
+        .text('Classifier Direction Sensitivity (AUC)')
+        .style('text-anchor','middle')
+        .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+    // Add x-axis
+    plot.append("g")
+          .attr("class", "x axis")
+          .append('svg:line')
+            .attr('x2',w)
+            .attr('y1',h)
+            .attr('y2',h)
+            .style('stroke-width',3)
+            .style('stroke','black');
+    plot.select('.x.axis').append('svg:text')
+        .text('Trial Time (s)').style('text-anchor','middle')
+        .attr('transform','translate('+(w/2)+','+(h+70)+') ');
+
+    // Sample Designator Box
+    dataRegion.append('svg:rect')
+            .style('fill','#777')
+            .style('stroke','#000')
+            .style('stroke-width','3px')
+            .style('fill-opacity',1)
+            .attr('width',(x(1)-x(0)))
+            .attr('height',30)
+            .attr('x',function(d,i) { return x(1); })
+            .attr('y',function(d) { return y(.40)-30; });
+    dataRegion.append('svg:text')
+            .text('Sample')
+            .attr('x',function(d,i) { return x(1.5); })
+            .attr('y',function(d) { return y(.40)-40; });
+
+    // Probe Designator Box
+    dataRegion.append('svg:rect')
+            .style('fill','#777')
+            .style('stroke','#000')
+            .style('fill-opacity',1)
+            .style('stroke-width','3px')
+            .attr('width',(x(2.5)-x(0)))
+            .attr('height',30)
+            .attr('x',function(d,i) { return x(6); })
+            .attr('y',function(d) { return y(.40)-30; });
+    dataRegion.append('svg:text')
+            .text('Probe')
+            .attr('x',function(d,i) { return x(7.25); })
+            .attr('y',function(d) { return y(.40)-40; });
+
+
+
+    // Chance
+    plot.append('svg:line')
+            .attr('id','chance-line')
+            .style('stroke-dasharray','5,3')
+            .style('stroke','black')
+            .style('stroke-width','2px')
+            .attr('x2',w)
+            .attr('y1',y(.5))
+            .attr('y2',y(.5));
+
+
+var visible = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var toggle = function(n) {
+    visible[n-1] = visible[n-1] == 1 ? 0 : 1;
+
+    d3.selectAll('.tr')
+        .filter(function(d,j) { return [n-1] == j;
+            })
+        .style('opacity',visible[n-1]); 
+}
+
+var myd = [];
+var redraw = function(to) {
+     switch(to) {
+         case 'Sample':
+             myd = samples;
+             break;
+         case 'Delay':
+             myd = delays;
+             break;
+     }
+
+     d3.selectAll('path.data-line').transition().duration(500).ease('linear')
+         .attr('d',function(d,i) { return line(myd[i]); });
+}
+
+d3.selectAll("#who button")
+        .data(['Sample','Delay'])
+        .on("click",function(w) { 
+            redraw(w); 
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == w; });
+                });
+
+      </script>
     </div>
   </body>
 </html>

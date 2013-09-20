@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+    <script type="text/javascript">
+
+var step = 0;
+var maxStep = 6;
+d3.selectAll('.photo').data(d3.range(5));
+
+var update = function() {
+    d3.selectAll('.photo').filter(function(d,i) { return i == step; }).transition().duration(1500).style('opacity',1);
+    d3.selectAll('.photo').filter(function(d,i) { return i != step; }).transition().duration(1500).style('opacity',0);
+};
+
+var down = function() {
+    step = step < maxStep ? step+1 : maxStep;
+    if (step < 6)
+        update();
+    else
+    {
+        d3.select('#beer').transition().duration(1000).ease('elastic')
+            .style('width','500px')
+            .style('height','500px')
+            .style('margin-left','-250px')
+            .style('margin-top','-250px');
+    }
+};
+
+var up = function() {
+    step = step > 0 ? step-1 : 0;
+    if (step == 5) 
+    {
+        d3.select('#beer').transition().duration(1000).ease('elastic')
+            .style('width','0px')
+            .style('height','0px')
+            .style('margin-left','0px')
+            .style('margin-top','0px');
+    } else {
+        update();
+    }
+};
+
+    </script>
+    <style>
+        #slide {padding-left:0px; padding-right: 0px;}
+    </style>
+  </head>
+  <body class='inverted'>
+    <div id="slide">
+        <img class='photo' src="media/jk-1.jpg" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 1;">
+        <img class='photo' src="media/jk-2.jpg" style="height: 120%; width: auto; margin-left:175px; margin-top:-100px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/fleet-bear-away.jpg" style="height: 100%; width: auto; margin-left:0px; margin-top:0px; position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1.jpg" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 1;">
+        <img class='photo' src="media/jk-3.jpg" style="height: 100%; width: auto; margin-left:-70px; margin-top:0px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-4.jpg" style="height: 100%; width: auto; margin-left:-115px; margin-top:0px;position: absolute; opacity: 0;">
+        <img id='beer' src='media/beer-sunk.png' style="width:0px; height: 0px; position:absolute; top:50%; left:50%; margin-left:0px; margin-top: 0px; opacity: 1;">
+    </div>
+  </body>
+</html>
