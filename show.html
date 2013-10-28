@@ -1,25 +1,29 @@
-
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Interactive Slideshow powered by d3.js & Bootstrap</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Interactive Slideshow powered by d3.js</title>
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap-theme.min.css">
     <link type="text/css" rel="stylesheet" href="css/show.css">
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
   </head>
   <body>
-      <div id="menu">
-          <form>
-              <select id="navigator" onchange="navigateTo(this.options[this.selectedIndex].value)">
-              </select>
-          </form>
-      </div>
+    <div id="menu">
+      <form>
+        <select id="navigator" onchange="navigateTo(this.options[this.selectedIndex].value)">
+        </select>
+      </form>
+    </div>
     <script type="text/javascript">
 var slides = [
-    {title:"Title Page",loc:"title.html"},
+  {title:"Title Page",loc:"title.html"},
+  {title:"Title Page",loc:"title.html"},
+  {title:"Title Page",loc:"title.html"},
 ];
     </script>
     <script type="text/javascript" src="js/my-show.js"></script>
+    <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
-
