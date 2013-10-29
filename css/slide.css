@@ -92,8 +92,9 @@ img.wide {
     width: 960px;
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
     font-size: 22px;
+    padding-right: 40px;
+    padding-left: 40px;
 }
 
 #content.top {
@@ -182,7 +183,7 @@ img.wide {
 
 ul {
     text-align: left;
-    list-style-position:inside;
+    list-style-position: outside;
     margin-top: .5em;
     margin-bottom: .5em;
 }

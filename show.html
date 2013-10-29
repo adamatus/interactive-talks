@@ -3,11 +3,11 @@
   <head>
     <title>Interactive Slideshow powered by d3.js & Bootstrap</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap-theme.min.css">
-    <link type="text/css" rel="stylesheet" href="css/show.css">
-    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
-    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/show.css">
+    <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
   </head>
   <body>
     <div id="menu">
@@ -18,12 +18,15 @@
     </div>
     <script type="text/javascript">
 var slides = [
-  {title:"Title Page",loc:"title.html"},
-  {title:"Title Page",loc:"title.html"},
-  {title:"Title Page",loc:"title.html"},
+  {title:"Title Page",loc:"templates/title.html"},
+  {title:"Chart",loc:"templates/barchart.html"},
+  {title:"Table",loc:"templates/table.html"},
+  {title:"List - One Column",loc:"templates/one-col-list.html"},
+  {title:"List - Two Column",loc:"templates/two-col-list.html"},
+  {title:"List - Three Column",loc:"templates/three-col-list.html"},
 ];
     </script>
-    <script type="text/javascript" src="js/my-show.js"></script>
-    <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/my-show.js"></script>
+    <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
