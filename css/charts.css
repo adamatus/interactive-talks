@@ -9,6 +9,16 @@ svg {
   font-family: "Helvetica Neue", Helvetica;
 }
 
+path {
+  fill: none;
+  stroke-width: 3px;
+  stroke: black;
+}
+
+path.data {
+  stroke: green;
+}
+
 .rule line {
   stroke: #fff;
   stroke-opacity: .2;
@@ -65,7 +75,9 @@ text.yAxis {
 }
 
 .x.axis path {
-  display: none;
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
 }
 
 .y.axis text {
