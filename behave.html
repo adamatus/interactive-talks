@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/slide.css">
+    <link type="text/css" rel="stylesheet" href="/css/charts.css">
+    <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/js/my-slide.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Behavioral Performance</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <div id="chart"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+// TODO Add legend
+// TODO Add mean
+// TODO Add ability to chance order
+var i, 
+    data = [
+{d: [
+  {y: 0, x: -45},
+  {y: 0.15, x: -20},
+  {y: 0.23, x: -7},
+  {y: 0.62, x: 7}, 
+  {y: 0.92, x: 20},
+  {y: 1, x: 45}
+],
+ order: 1,
+ col: "green"
+},
+{d: [
+  {y: .14, x: -45},
+  {y: 0.14, x: -20},
+  {y: 0.42, x: -7},
+  {y: 0.57, x: 7}, 
+  {y: 1, x: 20},
+  {y: .85, x: 45}
+],
+  order: 2,
+  col: "red"
+},
+{ d: [
+  {y: 0, x: -45},
+  {y: 0.28, x: -20},
+  {y: 0.43, x: -7},
+  {y: 0.71, x: 7}, 
+  {y: 0.71, x: 20},
+  {y: 0.85, x: 45}
+],
+  order: 3,
+  col: "blue"
+}];
+
+var padding = 40,
+    barWidth = 50,
+    width = 600, 
+    height = 350,
+    started = false,
+    on = 'green',
+    off = 'red';
+
+var margins = [50, 50, 10, 30],
+    mb = margins[0],
+    ml = margins[1],
+    mt = margins[2],
+    mr = margins[3],
+    w = width - (ml + mr),
+    h = height - (mb + mt);
+
+var x = d3.scale.linear()
+  .domain([-50, 50])
+  .range([0, w]);
+var y = d3.scale.linear()
+  .domain([0,1])
+  .rangeRound([h, 0]);
+
+var xAxis = d3.svg.axis().scale(x).ticks(10).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).ticks(5).orient("left");
+
+var lineDemo = d3.select("#chart")
+  .append("svg:svg")
+  .attr("width", width)
+  .attr("height", height+padding);
+
+var plot = lineDemo.append('g')
+  .attr('id','plot')
+  .attr('transform','translate('+ml+','+mt+')');
+
+// Add y-axis
+plot.append("g")
+  .attr("class", "x axis")
+  .attr('transform','translate(0,'+h+')')
+  .call(xAxis);
+
+// Add y-axis
+plot.append("g")
+  .attr("class", "y axis")
+  .call(yAxis);
+
+var plotgroup = plot.append('g')
+  .attr('class','plot-group');
+
+var line = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(d.x); })
+  .y(function(d) { return y(d.y); });
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(0))
+  .attr('x2',x(0))
+  .attr('y1',y(0))
+  .attr('y2',y(1));
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(-50))
+  .attr('x2',x(50))
+  .attr('y1',y(.5))
+  .attr('y2',y(.5));
+
+var data_group = plotgroup.selectAll('g.data-group')
+    .data(data)
+  .enter().append('g')
+    .style('stroke',function(d) { return d.col; })
+    .attr('class','data-group');
+
+data_group.append('svg:path')
+  .attr('d',function(d) { console.log(d); return line(d.d); })
+  .attr('class','data');
+
+data_group.selectAll('circle.data')
+    .data(function(d) { return d.d; })
+  .enter().append('svg:circle')
+    .attr('class','data')
+    .attr('r',5)
+    .attr('cy',function(d) { return y(d.y); })
+    .attr('cx',function(d) { return x(d.x); });
+
+var up = function up() {
+  var tmp = off;
+  off = on;
+  on = tmp;
+  lineDemo.selectAll(".data")
+    .style("stroke",on);
+};
+
+var down = function down() {
+      up();
+};
+    </script>
+    <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

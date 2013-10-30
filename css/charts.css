@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.axis {
+  stroke: black;
+}
+
 svg {
   display: inline;
   font-size: 24px;
@@ -12,11 +16,6 @@ svg {
 path {
   fill: none;
   stroke-width: 3px;
-  stroke: black;
-}
-
-path.data {
-  stroke: green;
 }
 
 .rule line {
@@ -99,4 +98,15 @@ text.yAxis {
     fill: none;
     stroke: #000;
     stroke-opacity: .2;
+}
+
+circle.data {
+  fill: white;
+  stroke-width: 3px;
+}
+
+.chance-line {
+  stroke-width: 1px;
+  stroke: gray;
+  stroke-dasharray: 6 6;
 }
