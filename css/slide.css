@@ -285,3 +285,15 @@ input {
   padding-left: 150px;
   padding-right: 150px;
 }
+
+table {
+  text-align: center;
+}
+
+th {
+  text-align: center;
+}
+
+th.row-header { 
+  text-align: left;
+}
