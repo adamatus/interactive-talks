@@ -144,7 +144,7 @@ img.wide {
     padding-bottom: 15px;
     font-weight: bold; 
     font-size: 30px;
-    text-shadow: 1px 1px 2px #bbb;
+    text-shadow: 1px 1px 2px #ccc;
 }
 
 #footer h2 {
@@ -152,7 +152,7 @@ img.wide {
   padding-bottom: 11px;
   font-size: 22px;
   font-weight: 300;
-  text-shadow: 0 1px 0 #ccc; 
+  text-shadow: 0 1px 0 #ddd; 
   font-style: italic;
   color: #666;
   text-align: right;
@@ -266,4 +266,17 @@ input {
 #inner-step-counter {
     stroke: none;
     fill: #DDD;
+}
+
+
+.panel-footer {
+  font-size: 14px;
+  text-align: right;
+  font-style: italic;
+  color: gray;
+}
+
+#content.minimal-side-pad {
+  padding-left: 10px;
+  padding-right: 10px;
 }
