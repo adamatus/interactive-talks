@@ -280,3 +280,8 @@ input {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+#content.extra-side-pad {
+  padding-left: 150px;
+  padding-right: 150px;
+}
