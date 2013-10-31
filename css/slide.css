@@ -113,6 +113,10 @@ img.wide {
     text-align: right;
 }
 
+#content.center {
+    text-align: center;
+}
+
 
 #content-frame.with-only-head {
     height: 677px;
@@ -159,21 +163,22 @@ img.wide {
   text-shadow: 0 1px 4px #000;
 }
 
-#content h1 {
+h1.main-title {
     padding-left: 2em;
     padding-right: 2em;
     padding-top: .5em;
     padding-bottom: .5em;
-    font-size: 48px;
+    font-size: 36px;
     text-shadow: 1px 1px 2px #bbb;
     line-height: 1.5em;
 }
 
-#content h2 {
+h2.main-title {
     padding-left: 2em;
     padding-right: 2em;
-    padding-top: 0em;
+    padding-top: 2em;
     padding-bottom: 2em;
+    font-size: 32px;
     text-shadow: 1px 1px 2px #bbb;
 }
 
