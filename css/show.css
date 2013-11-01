@@ -38,11 +38,11 @@ iframe {
   height: 744px;
   background: #fff;
   -moz-transition-property: -moz-transform, opacity, background, z-index;
-  -moz-transition-duration: 250ms;
+  -moz-transition-duration: 0ms;
   -ms-transition-property: -ms-transform, opacity, background, z-index;
-  -ms-transition-duration: 250ms;
+  -ms-transition-duration: 0ms;
   -webkit-transition-property: -webkit-transform, opacity, background, z-index;
-  -webkit-transition-duration: 250ms;
+  -webkit-transition-duration: 0ms;
   display: block;
   border-radius: 0px;
   padding: 0px;
