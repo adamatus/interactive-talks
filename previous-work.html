@@ -16,12 +16,16 @@
       </div>
       <div id="content-frame" class='with-only-head'>
         <div id="content" class="minimal-side-pad">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Single Item Memory</h3>
-                </div>
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    Single Item Memory
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <ul>
                     <li>Motion direction recognition</li>
@@ -30,28 +34,32 @@
                     <li>No evidence for representation in parietal or
                     frontal</li>
                   </ul>
-                  <img class="img-responsive" src='media/riggall_and_postle_2012.png'>
+                  <img class="img-responsive" src='media/riggall_and_postle_2012.png' alt="Riggall and Postle Decoding Results">
                 </div>
                 <div class="panel-footer">
                   Riggall &amp; Postle 2012
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Multiple Item Memory (Sequential Presentation)</h3>
-                </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                  Multiple Item Memory (Sequential Presentation)
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseTwo" class="panel-collapse collapse">
                 <div class="panel-body">
                   <ul>
                     <li>Motion direction recall</li>
                     <li>Delay-period stimulus MVPA evidence correlates with
                     behavioral estimates of memory precision</li>
                   </ul>
-                  <img class="img-responsive" src='media/emrich_et_al_2013.png' style="padding-top: 12px; padding-bottom: 13px;">
+                  <img class="img-responsive" src='media/emrich_et_al_2013.png' style="padding-top: 12px; padding-bottom: 13px;" alt="Emrich, Riggall et al Decoding Results">
                 </div>
                 <div class="panel-footer">
-                  Emrich et al. 2013
+                  Emrich, Riggall &amp; Postle. 2013
                 </div>
               </div>
             </div>
