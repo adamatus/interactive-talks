@@ -100,11 +100,6 @@ text.yAxis {
     stroke-opacity: .2;
 }
 
-circle.data {
-  fill: white;
-  stroke-width: 3px;
-}
-
 .chance-line {
   stroke-width: 1px;
   stroke: gray;
