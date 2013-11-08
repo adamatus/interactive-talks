@@ -105,3 +105,8 @@ text.yAxis {
   stroke: gray;
   stroke-dasharray: 6 6;
 }
+
+.marker-line {
+  stroke: black;
+  stroke-width: 2px;
+}
