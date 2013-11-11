@@ -15,7 +15,7 @@ svg {
 
 path {
   fill: none;
-  stroke-width: 3px;
+  stroke-width: 6px;
 }
 
 .rule line {
@@ -101,8 +101,8 @@ text.yAxis {
 }
 
 .chance-line {
-  stroke-width: 1px;
-  stroke: gray;
+  stroke-width: 3px;
+  stroke: #CCC;
   stroke-dasharray: 6 6;
 }
 
