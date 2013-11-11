@@ -114,12 +114,12 @@ var eventMarkerGroup = plotgroup.append('svg:g')
   .attr('class','event-marker-group');
 
 var markerGroups = eventMarkerGroup.selectAll('.marker-group')
-.data([{trial_time: 0, angle: 45},
-    {trial_time: 12, angle: 52}])
+.data([{trial_time: 0, angle: -45},
+    {trial_time: 12, angle: -55}])
     .enter().append('svg:g')
     .attr('transform',function(d) { 
         // FIXME Figure out SVG rotate
-        return 'translate('+xAxisScale(d.trial_time)+',0)';
+        return 'translate('+xAxisScale(d.trial_time+1)+' '+legendy(0)+' ) rotate('+d.angle+' 1 1)';
         })
   .attr('class','marker-group');
 
@@ -127,20 +127,20 @@ markerGroups.append('svg:line')
   .attr('class','marker-line')
   .attr('x1',xAxisScale(.4)-xAxisScale(0))
   .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
-  .attr('y1',legendy(.05))
-  .attr('y2',legendy(.05));
+  .attr('y1',legendy(.05)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
 markerGroups.append('svg:line')
   .attr('class','marker-line')
   .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
   .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
-  .attr('y1',legendy(.05-.020))
-  .attr('y2',legendy(.05));
+  .attr('y1',legendy(.05-.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
 markerGroups.append('svg:line')
   .attr('class','marker-line')
   .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
   .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
-  .attr('y1',legendy(.05+.020))
-  .attr('y2',legendy(.05));
+  .attr('y1',legendy(.05+.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
 
 var addLines = function() {
   var data_group = plotgroup.selectAll('g.data-group')
