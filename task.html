@@ -25,9 +25,9 @@
 var i;
 
 var width = 900,
-    height = 450;
+    height = 550;
 
-var margins = [0, 0, 0, 0],
+var margins = [10, 0, 100, 0],
     mb = margins[0],
     ml = margins[1],
     mt = margins[2],
@@ -61,12 +61,12 @@ var plot = lineDemo.append('g')
   .attr('transform','translate('+ml+','+mt+')');
 
 var trial_segs = [
-{name: 'Fixation', dur: '2 s', fix_col: 'white'},
-{name: 'Memory Sample', dur: '2 s', fix_col: 'white'},
-{name: 'Delay', dur: '12 s', fix_col: 'white'},
-{name: 'Probe (CW/CCW?)', dur: '1 s', fix_col: 'white'},
-{name: 'Feedback', dur: '1 s', fix_col: 'red'},
-{name: 'ITI', dur: '5/7/9 s', fix_col: 'gray'},
+{name: 'Fixation', dur: '2 s', dur2: '', fix_col: 'white'},
+{name: 'Sample', dur: '2 s', dur2: '', fix_col: 'white'},
+{name: 'Delay', dur: '12 s', dur2: '', fix_col: 'white'},
+{name: 'Probe', dur: '(CW/CCW?)', dur2: '1 s', fix_col: 'white'},
+{name: 'Feedback', dur: '1 s', dur2: '', fix_col: 'red'},
+{name: 'ITI', dur: '5/7/9 s', dur2: '', fix_col: 'gray'},
 ];
 
 var segs = plot.selectAll('g.trial-seg')
@@ -83,6 +83,8 @@ segs.append('svg:rect')
   .attr('class','trial-screen')
   .attr('x',0)
   .attr('y',0)
+  .attr('rx',10)
+  .attr('ry',10)
   .attr('width',x(1))
   .attr('height',y(1))
   .style('fill','black')
@@ -94,8 +96,8 @@ segs.append('svg:line')
   .attr('class','trial-fix')
   .style('stroke',function(d) { return d.fix_col;})
   .style('stroke-width','4px')
-  .attr('x1',x(.5-.1))
-  .attr('x2',x(.5+.1))
+  .attr('x1',x(.5-.09))
+  .attr('x2',x(.5+.09))
   .attr('y1',y(.5))
   .attr('y2',y(.5));
 
@@ -111,6 +113,7 @@ segs.append('svg:line')
 // FIXME Add left align style
 segs.append('svg:text')
   .attr('class','trial-name')
+  .style('text-anchor','start')
   .text(function(d) { return d.name; })
   .attr('y',y(1))
   .attr('dy','1.25em');
@@ -118,9 +121,17 @@ segs.append('svg:text')
 // FIXME Remove this is duration can be combined with name and line wrapped
 segs.append('svg:text')
   .attr('class','trial-name')
+  .style('text-anchor','start')
   .text(function(d) { return d.dur; })
   .attr('y',y(1))
   .attr('dy','2.25em');
+
+segs.append('svg:text')
+  .attr('class','trial-name')
+  .style('text-anchor','start')
+  .text(function(d) { return d.dur2; })
+  .attr('y',y(1))
+  .attr('dy','3.25em');
 
 
 
