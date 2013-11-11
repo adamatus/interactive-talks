@@ -10,7 +10,7 @@
 svg {
   display: inline;
   font-size: 24px;
-  font-family: "Helvetica Neue", Helvetica;
+  font-family: "Trebuchet MS";
 }
 
 path {
@@ -107,6 +107,5 @@ text.yAxis {
 }
 
 .marker-line {
-  stroke: black;
-  stroke-width: 2px;
+
 }
