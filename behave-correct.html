@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/slide.css">
+    <link type="text/css" rel="stylesheet" href="/css/charts.css">
+    <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="/js/my-slide.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Behavioral Performance</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <div id="chart"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+var i;
+var myd = [];
+var mags = [-45,-20,-7,7,20,45];
+
+d3.text('data/resp_proportions.1d', function(d) {
+    d = d.split('\n');
+    d = d[3].split(' ');
+    myd.push({load: 1, col: 'blue', val: +d[1] });
+    myd.push({load: 2, col: 'red', val: +d[2]});
+    myd.push({load: 3, col: 'green', val: +d[3]});
+
+    d3.text('data/resp_proportions_sd.1d', function(dd) {
+      dd = dd.split('\n');
+      dd = dd[3].split(' ');
+      myd[0].sds = +dd[1];
+      myd[1].sds = +dd[2];
+      myd[2].sds = +dd[3];
+
+      addRects();
+    })
+});
+
+var padding = 40,
+    width = 900,
+    height = 450,
+    started = false;
+
+var margins = [50, 250, 10, 150],
+    mb = margins[0],
+    ml = margins[1],
+    mt = margins[2],
+    mr = margins[3],
+    w = width - (ml + mr),
+    h = height - (mb + mt);
+
+var x = d3.scale.linear()
+  .domain([0,4])
+  .range([0, w]);
+var y = d3.scale.linear()
+  .domain([0,100])
+  .rangeRound([h, 0]);
+var legendy = d3.scale.linear()
+  .domain([0,1])
+  .rangeRound([h, 0]);
+
+var xAxis = d3.svg.axis().scale(x).ticks(5).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).ticks(5).orient("left");
+
+var lineDemo = d3.select("#chart")
+  .append("svg:svg")
+  .attr("width", width)
+  .attr("height", height+padding);
+
+var plot = lineDemo.append('g')
+  .attr('id','plot')
+  .attr('transform','translate('+ml+','+mt+')');
+
+// Add x-axis
+var x_axis = plot.append("g")
+  .attr("class", "x axis")
+  .attr('transform','translate(0,'+h+')');
+x_axis.append('svg:text')
+  .text('Memory Load')
+  .attr('transform','translate('+x(2)+',80)');
+x_axis.call(xAxis);
+
+d3.selectAll('g.x.axis g.tick')
+    .data([0,1,1,1,0])
+  .style('opacity',function(d) { return d; });
+
+// Add y-axis
+var y_axis = plot.append("g")
+  .attr("class", "y axis")
+y_axis.append('svg:text')
+  .text('Percentage')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+legendy(.55)+')');
+y_axis.append('svg:text')
+  .text('correct')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+legendy(.45)+')');
+y_axis.call(yAxis);
+
+var plotgroup = plot.append('g')
+  .attr('class','plot-group');
+
+var line = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(d.x); })
+  .y(function(d) { return y(d.y); });
+
+var line2 = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(mags[i]); })
+  .y(function(d) { return y(d); });
+
+var addRects = function() {
+  var data_group = plotgroup.selectAll('g.data-group')
+      .data(myd)
+    .enter().append('g')
+      .style('stroke',function(d) { return d.col; })
+      .style('fill',function(d) { return d.col; })
+      .attr('class','data-group');
+
+//  data_group.selectAll('se.data')
+//    .data(function(d) {
+//        var out = [];
+//        for (var i=0; i < d.vals.length; i++) {
+//          out.push({y: +d.vals[i], se: +d.sds[i]/Math.sqrt(8)});
+//        }
+//        return out;
+//      })
+    data_group.append('svg:line')
+      .attr('class','data')
+      .style('stroke-width','6px')
+      .attr('y1',function(d) { return y((d.val+d.sds)*100); })
+      .attr('y2',function(d) { return y((d.val-d.sds)*100); })
+      .attr('x1',function(d,i) { return x(i+1); })
+      .attr('x2',function(d,i) { return x(i+1); });
+
+  data_group.append('svg:circle')
+      .style('fill',function(d) {return d.col;})
+      .attr('class','data')
+      .attr('r',8)
+      .attr('cy',function(d) { return y(d.val*100); })
+      .attr('cx',function(d,i) { return x(i+1); });
+
+}
+
+var step = 0;
+var maxStep = 2;
+
+var update = function() {
+  var data_group = plotgroup.selectAll('g.data-group');
+
+  if (step == 0) {
+    data_group.filter(function(d,i) { return i != 0;}).style('opacity',0);
+  } else if (step == 1) {
+    data_group.filter(function(d,i) { return i != 2;}).style('opacity',1);
+    data_group.filter(function(d,i) { return i == 2;}).style('opacity',0);
+  } else {
+    data_group.style('opacity',1);
+  }
+};
+
+var down = function down() {
+  step = step < maxStep ? step+1 : maxStep;
+  update();
+};
+
+var up = function up() {
+  step = step > 0 ? step-1 : 0;
+  update();
+};
+    </script>
+    <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
