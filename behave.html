@@ -25,50 +25,15 @@
 // TODO Add legend
 // TODO Add mean
 // TODO Add ability to chance order
-var i,
-    data = [
-{d: [
-  {y: 0, x: -45},
-  {y: 0.15, x: -20},
-  {y: 0.23, x: -7},
-  {y: 0.62, x: 7},
-  {y: 0.92, x: 20},
-  {y: 1, x: 45}
-],
- order: 1,
- col: "green"
-},
-{d: [
-  {y: .14, x: -45},
-  {y: 0.14, x: -20},
-  {y: 0.42, x: -7},
-  {y: 0.57, x: 7},
-  {y: 1, x: 20},
-  {y: .85, x: 45}
-],
-  order: 2,
-  col: "red"
-},
-{ d: [
-  {y: 0, x: -45},
-  {y: 0.28, x: -20},
-  {y: 0.43, x: -7},
-  {y: 0.71, x: 7},
-  {y: 0.71, x: 20},
-  {y: 0.85, x: 45}
-],
-  order: 3,
-  col: "blue"
-}];
-
+var i;
 var myd = [];
 var mags = [-45,-20,-7,7,20,45];
 
 d3.text('data/summary_cw.1d', function(d) {
     d = d.split('\n');
-    myd.push({load: 1, col: 'blue', vals: d[1].split(' ').slice(1)});
-    myd.push({load: 2, col: 'red', vals: d[2].split(' ').slice(1)});
-    myd.push({load: 3, col: 'green', vals: d[3].split(' ').slice(1)});
+    myd.push({load: 1, col: '#E31A1C', vals: d[1].split(' ').slice(1)});
+    myd.push({load: 2, col: '#FD8D3C', vals: d[2].split(' ').slice(1)});
+    myd.push({load: 3, col: '#FECC5C', vals: d[3].split(' ').slice(1)});
 
     d3.text('data/summary_cw_sd.1d', function(dd) {
       dd = dd.split('\n');
@@ -135,8 +100,48 @@ x_axis.call(xAxis);
 var y_axis = plot.append("g")
   .attr("class", "y axis")
 y_axis.append('svg:text')
-  .text('Proportion of CW Responses')
-  .attr('transform','translate(-30,'+y(.5)+')');
+  .text('Proportion')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+y(.6)+')');
+y_axis.append('svg:text')
+  .text('of clockwise')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+y(.5)+')');
+y_axis.append('svg:text')
+  .text('responses')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+y(.4)+')');
+y_axis.call(yAxis);
+
+var plotgroup = plot.append('g')
+  .attr('class','plot-group');
+
+var line = d3.svg.line()
+  .interpolate('basis-open')
+  .x(function(d,i) { return x(d.x); })
+  .y(function(d) { return y(d.y); });
+
+// Add quandrant dividers
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(0))
+  .attr('x2',x(0))
+  .attr('y1',y(0))
+  .attr('y2',y(1));
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(-50))
+  .attr('x2',x(50))
+  .attr('y1',y(.5))
+  .attr('y2',y(.5));
+
+
+var sigmoid = function (b0,b1,x) {
+  return 1/(1+Math.exp(-(b0+b1*x)));
+};
+
 y_axis.call(yAxis);
 
 var plotgroup = plot.append('g')
@@ -169,7 +174,8 @@ var sigmoid = function (b0,b1,x) {
 };
 
 //var xs = d3.range(101).map(function(d) { return (d-50);});
-var xs = d3.range(1001).map(function(d) { return (d-500)/10;});
+var xs = d3.range(-50,50,2.5);
+//var xs = d3.range(1001).map(function(d) { return (d-500)/10;});
 
 var addLines = function() {
   var data_group = plotgroup.selectAll('g.data-group')
@@ -189,7 +195,7 @@ var addLines = function() {
       })
     .enter().append('svg:line')
       .attr('class','data')
-      .style('stroke-width','2px')
+      .style('stroke-width','6px')
       .attr('y1',function(d) { return y(d.y + d.se); })
       .attr('y2',function(d) { return y(d.y - d.se); })
       .attr('x1',function(d,i) { return x(mags[i]); })
@@ -200,7 +206,7 @@ var addLines = function() {
     .enter().append('svg:circle')
       .style('fill',function(d) {return d.col;})
       .attr('class','data')
-      .attr('r',5)
+      .attr('r',8)
       .attr('cy',function(d) { return y(d); })
       .attr('cx',function(d,i) { return x(mags[i]); });
 
@@ -224,7 +230,7 @@ var addLines = function() {
   legend_groups.append('svg:circle')
     .attr('cx',x(32.5))
     .attr('cy',function(d,i) { return y(i/15+.05); })
-    .attr('r',5)
+    .attr('r',8)
     .style('fill',function(d) {return d.col;})
     .attr('stroke',function(d) { return d.col; })
     .attr('class','legend-dot');
@@ -232,7 +238,7 @@ var addLines = function() {
   legend_groups.append('svg:line')
     .attr('x1',x(30))
     .attr('x2',x(35))
-    .style('stroke-width','3px')
+    .style('stroke-width','6px')
     .attr('y1',function(d,i) { return y(i/15+.05); })
     .attr('y2',function(d,i) { return y(i/15+.05); })
     .attr('stroke',function(d) { return d.col; })
