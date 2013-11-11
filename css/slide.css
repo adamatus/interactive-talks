@@ -2,10 +2,11 @@ html {
     cursor: crosshair;
 }
 
-h1, h2, h3, h4, h5, p {
-    margin: 0;
-    padding: 0;
-    border: 0;
+h1, h2, h3, h4, h5, p, li, a {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: "Trebuchet MS"
 }
 
 
@@ -16,7 +17,6 @@ body {
   padding-right: 0px;
   width: 1000px;
   font-size: 16px;
-  font-family: "Helvetica Neue", Helvetica;
 }
 
 body.inverted {
@@ -144,7 +144,6 @@ img.wide {
     padding-bottom: 15px;
     font-weight: bold; 
     font-size: 30px;
-    text-shadow: 1px 1px 2px #ccc;
 }
 
 #footer h2 {
@@ -152,7 +151,6 @@ img.wide {
   padding-bottom: 11px;
   font-size: 22px;
   font-weight: 300;
-  text-shadow: 0 1px 0 #ddd; 
   font-style: italic;
   color: #666;
   text-align: right;
@@ -160,7 +158,6 @@ img.wide {
 
 #header.inverted, #footer.inverted {
   color: #fff;
-  text-shadow: 0 1px 4px #000;
 }
 
 h1.main-title {
@@ -169,7 +166,6 @@ h1.main-title {
     padding-top: .5em;
     padding-bottom: .5em;
     font-size: 36px;
-    text-shadow: 1px 1px 2px #bbb;
     line-height: 1.5em;
 }
 
@@ -179,7 +175,6 @@ h2.main-title {
     padding-top: 2em;
     padding-bottom: 2em;
     font-size: 32px;
-    text-shadow: 1px 1px 2px #bbb;
 }
 
 ul {
