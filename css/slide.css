@@ -39,9 +39,8 @@ body.inverted {
     left: -1px;
     border: 1px black solid;
 }
-    
 
-img { 
+img {
     display: inline;
     vertical-align: middle;
 }
@@ -88,7 +87,7 @@ img.wide {
 }
 
 #content-frame {
-    top: 67px; 
+    top: 67px;
     display: table;
     height: 628px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
     z-index: 0;
@@ -98,7 +97,7 @@ img.wide {
     width: 960px;
     display: table-cell;
     vertical-align: middle;
-    font-size: 22px;
+    font-size: 24px;
     padding-right: 40px;
     padding-left: 40px;
 }
@@ -130,11 +129,11 @@ img.wide {
 
 #content-frame.with-only-foot {
     height: 695px; /*744- sum(footer:padding-top,font-size,padding-bottom)*/
-    top: 0; 
+    top: 0;
 }
 
 #content-frame.with-neither {
-    top: 0px; 
+    top: 0px;
     height: 744px; /*744- sum(heading:padding-top,font-size,padding-bottom)*/
 }
 
@@ -148,7 +147,7 @@ img.wide {
 #header h1 {
     padding-top: 15px;
     padding-bottom: 15px;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 30px;
 }
 
@@ -198,6 +197,7 @@ ul ul {
 
 li {
     padding-bottom: 1em;
+    font-size; 24px;
 }
 
 
@@ -296,6 +296,10 @@ th {
   text-align: center;
 }
 
-th.row-header { 
+th.row-header {
   text-align: left;
+}
+
+ul.summary li {
+font-size: 28px;
 }

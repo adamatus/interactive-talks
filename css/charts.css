@@ -107,5 +107,6 @@ text.yAxis {
 }
 
 .marker-line {
-
+  stroke-width: 3px;
+  stroke: #29ABE2;
 }

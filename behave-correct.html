@@ -2,13 +2,13 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap-theme.min.css">
-    <link type="text/css" rel="stylesheet" href="/css/slide.css">
-    <link type="text/css" rel="stylesheet" href="/css/charts.css">
-    <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
-    <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="/js/my-slide.js"></script>
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
   </head>
   <body>
     <div id="slide">
@@ -29,9 +29,9 @@ var mags = [-45,-20,-7,7,20,45];
 d3.text('data/resp_proportions.1d', function(d) {
     d = d.split('\n');
     d = d[3].split(' ');
-    myd.push({load: 1, col: 'blue', val: +d[1] });
-    myd.push({load: 2, col: 'red', val: +d[2]});
-    myd.push({load: 3, col: 'green', val: +d[3]});
+    myd.push({load: 1, col: '#2171B5', val: +d[1] });
+    myd.push({load: 2, col: '#6BAED6', val: +d[2]});
+    myd.push({load: 3, col: '#BDD7E7', val: +d[3]});
 
     d3.text('data/resp_proportions_sd.1d', function(dd) {
       dd = dd.split('\n');
@@ -177,6 +177,6 @@ var up = function up() {
   update();
 };
     </script>
-    <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>

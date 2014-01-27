@@ -26,19 +26,21 @@ var i;
 var myd = [];
 var mags = [-45,-20,-7,7,20,45];
 
-d3.text('data/rts.1d', function(d) {
+d3.text('data/fits_cw.1d', function(d) {
     d = d.split('\n');
-    myd.push({load: 1, col: '#2171B5', vals: d[1].split(' ').slice(1)});
-    myd.push({load: 2, col: '#6BAED6', vals: d[2].split(' ').slice(1)});
-    myd.push({load: 3, col: '#BDD7E7', vals: d[3].split(' ').slice(1)});
+    //d = d[3].split(' ');
+    myd.push({load: 1, col: '#2171B5', val: +d[1].split(' ')[2] });
+    myd.push({load: 2, col: '#6BAED6', val: +d[2].split(' ')[2] });
+    myd.push({load: 3, col: '#BDD7E7', val: +d[3].split(' ')[2] });
 
-    d3.text('data/rts_sd.1d', function(dd) {
+    d3.text('data/resp_proportions_sd.1d', function(dd) {
       dd = dd.split('\n');
-      myd[0].sds = dd[1].split(' ').splice(1);
-      myd[1].sds = dd[2].split(' ').splice(1);
-      myd[2].sds = dd[3].split(' ').splice(1);
+      dd = dd[3].split(' ');
+      myd[0].sds = +dd[1]*.2;
+      myd[1].sds = +dd[2]*.2;
+      myd[2].sds = +dd[3]*.2;
 
-      addLines();
+      addRects();
     })
 });
 
@@ -56,16 +58,16 @@ var margins = [50, 250, 10, 150],
     h = height - (mb + mt);
 
 var x = d3.scale.linear()
-  .domain([-50, 50])
+  .domain([0,4])
   .range([0, w]);
 var y = d3.scale.linear()
-  .domain([600,1200])
+  .domain([0,.20])
   .rangeRound([h, 0]);
 var legendy = d3.scale.linear()
   .domain([0,1])
   .rangeRound([h, 0]);
 
-var xAxis = d3.svg.axis().scale(x).ticks(10).orient("bottom");
+var xAxis = d3.svg.axis().scale(x).ticks(5).orient("bottom");
 var yAxis = d3.svg.axis().scale(y).ticks(5).orient("left");
 
 var lineDemo = d3.select("#chart")
@@ -77,24 +79,28 @@ var plot = lineDemo.append('g')
   .attr('id','plot')
   .attr('transform','translate('+ml+','+mt+')');
 
-// Add y-axis
+// Add x-axis
 var x_axis = plot.append("g")
   .attr("class", "x axis")
   .attr('transform','translate(0,'+h+')');
 x_axis.append('svg:text')
-  .text('Magnitude of change (degrees)')
-  .attr('transform','translate('+x(0)+',80)');
+  .text('Memory Load')
+  .attr('transform','translate('+x(2)+',80)');
 x_axis.call(xAxis);
+
+d3.selectAll('g.x.axis g.tick')
+    .data([0,1,1,1,0])
+  .style('opacity',function(d) { return d; });
 
 // Add y-axis
 var y_axis = plot.append("g")
   .attr("class", "y axis")
 y_axis.append('svg:text')
-  .text('Reaction')
+  .text('Precision')
   .style('text-anchor','middle')
   .attr('transform','translate(-140,'+legendy(.55)+')');
 y_axis.append('svg:text')
-  .text('time (ms)')
+.text('(1/degree)')
   .style('text-anchor','middle')
   .attr('transform','translate(-140,'+legendy(.45)+')');
 y_axis.call(yAxis);
@@ -112,7 +118,7 @@ var line2 = d3.svg.line()
   .x(function(d,i) { return x(mags[i]); })
   .y(function(d) { return y(d); });
 
-var addLines = function() {
+var addRects = function() {
   var data_group = plotgroup.selectAll('g.data-group')
       .data(myd)
     .enter().append('g')
@@ -120,63 +126,29 @@ var addLines = function() {
       .style('fill',function(d) { return d.col; })
       .attr('class','data-group');
 
-  data_group.selectAll('se.data')
-    .data(function(d) {
-        var out = [];
-        for (var i=0; i < d.vals.length; i++) {
-          out.push({y: +d.vals[i], se: +d.sds[i]/Math.sqrt(8)});
-        }
-        return out;
-      })
-    .enter().append('svg:line')
+//  data_group.selectAll('se.data')
+//    .data(function(d) {
+//        var out = [];
+//        for (var i=0; i < d.vals.length; i++) {
+//          out.push({y: +d.vals[i], se: +d.sds[i]/Math.sqrt(8)});
+//        }
+//        return out;
+//      })
+    data_group.append('svg:line')
       .attr('class','data')
       .style('stroke-width','6px')
-      .attr('y1',function(d) { return y(d.y + d.se); })
-      .attr('y2',function(d) { return y(d.y - d.se); })
-      .attr('x1',function(d,i) { return x(mags[i]); })
-      .attr('x2',function(d,i) { return x(mags[i]); });
+      .attr('y1',function(d) { return y((d.val+d.sds)); })
+      .attr('y2',function(d) { return y((d.val-d.sds)); })
+      .attr('x1',function(d,i) { return x(i+1); })
+      .attr('x2',function(d,i) { return x(i+1); });
 
-  data_group.selectAll('circle.data')
-      .data(function(d) { return d.vals; })
-    .enter().append('svg:circle')
+  data_group.append('svg:circle')
       .style('fill',function(d) {return d.col;})
       .attr('class','data')
       .attr('r',8)
-      .attr('cy',function(d) { return y(d); })
-      .attr('cx',function(d,i) { return x(mags[i]); });
+      .attr('cy',function(d) { return y(d.val); })
+      .attr('cx',function(d,i) { return x(i+1); });
 
-  data_group.append('svg:path')
-    .attr('d',function(d) { return line2(d.vals.map(parseFloat)); })
-    .style('fill','none')
-    .attr('class','fit');
-
-  var legend_groups = data_group.append('svg:g')
-    .attr('class','legend-group');
-
-  legend_groups.append('svg:circle')
-    .attr('cx',x(32.5))
-    .attr('cy',function(d,i) { return legendy(i/15+.05); })
-    .attr('r',6)
-    .style('fill',function(d) {return d.col;})
-    .attr('stroke',function(d) { return d.col; })
-    .attr('class','legend-dot');
-
-  legend_groups.append('svg:line')
-    .attr('x1',x(30))
-    .attr('x2',x(35))
-    .style('stroke-width','6px')
-    .attr('y1',function(d,i) { return legendy(i/15+.05); })
-    .attr('y2',function(d,i) { return legendy(i/15+.05); })
-    .attr('stroke',function(d) { return d.col; })
-    .attr('class','legend-line');
-
-  legend_groups.append('svg:text')
-    .text(function(d,i) { return 'Load ' + (i+1);})
-    .attr('x',x(43))
-    .attr('y',function(d,i) { return legendy(i/15+.025); });
-
-  // Hide everything but load 1 dots
-  data_group.filter(function(d,i) { return i != 0;}).style('opacity',0);
 }
 
 var step = 0;

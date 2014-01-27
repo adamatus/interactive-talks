@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Direction Decoding</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <img class="glm" src='media/glm_surf_parietal.png' alt='GLM Results' style='position: absolute; width: 200px; height: auto; top: 0px; left: 750px'>
+          <div id="chart"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+var i;
+
+var myd = [];
+var cols = ['gray','gray','gray',"#6A3D9A","#B2DF8A","#33A02C","#A6CEE3","#1F78B4",
+    "#FB9A99","#E31A1C","#FDBF6F","#FF7F00",
+    "#CAB2D6","#6A3D9A"];
+
+var tsd = [];
+
+d3.text('data/ttatlas_parietal_top_250_sample_tents_load3.1D', function(d) {
+  d = d.split('\n');
+  tsd = d[1].split(' ');
+  addTS();
+});
+
+d3.text('data/dir_load1_perf_parietal.1D', function(d) {
+  d = d.split('\n');
+  for (i=1; i < 13; i++) {
+    myd.push({train_tr: i, col: cols[i], vals: d[i+1].split(' ').slice(1)});
+  }
+
+  addLines();
+});
+
+var padding = 40,
+    width = 900,
+    height = 450,
+    started = false;
+
+var margins = [50, 250, 10, 150],
+    mb = margins[0],
+    ml = margins[1],
+    mt = margins[2],
+    mr = margins[3],
+    w = width - (ml + mr),
+    h = height - (mb + mt);
+
+var x = d3.scale.linear()
+  .domain([0,13])
+  .range([0, w]);
+var y = d3.scale.linear()
+  .domain([.15,.666])
+  .rangeRound([h, 0]);
+var tsy = d3.scale.linear()
+  .domain([-.6,1])
+  .rangeRound([h, 0]);
+var legendy = d3.scale.linear()
+  .domain([0,1])
+  .rangeRound([h, 0]);
+var legendx = d3.scale.linear()
+  .domain([-50,50])
+  .rangeRound([0, w]);
+var xAxisScale = d3.scale.linear()
+  .domain([-2,24])
+  .range([0, w]);
+
+var xAxis = d3.svg.axis().scale(xAxisScale).ticks(10).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).ticks(5).orient("left");
+
+var lineDemo = d3.select("#chart")
+  .append("svg:svg")
+  .attr("width", width)
+  .attr("height", height+padding);
+
+var plot = lineDemo.append('g')
+  .attr('id','plot')
+  .attr('transform','translate('+ml+','+mt+')');
+
+plot.append('svg:text')
+  .text('Parietal')
+  .attr('transform','translate('+legendx(0)+',10)');
+plot.append('svg:text')
+  .text('(Train & Test on Load 1 Trials)')
+  .attr('class','catch-label')
+  .attr('transform','translate('+legendx(0)+',40)');
+
+// Add y-axis
+var x_axis = plot.append("g")
+  .attr("class", "x axis")
+  .attr('transform','translate(0,'+h+')');
+x_axis.append('svg:text')
+  .text('Trial timepoint (s)')
+  .attr('transform','translate('+legendx(0)+',80)');
+x_axis.call(xAxis);
+
+// Add y-axis
+var y_axis = plot.append("g")
+  .attr("class", "y axis")
+y_axis.append('svg:text')
+  .text('Direction')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+legendy(.6)+')');
+y_axis.append('svg:text')
+  .text('Decoding')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+legendy(.5)+')');
+y_axis.append('svg:text')
+  .text('Accuracy')
+  .style('text-anchor','middle')
+  .attr('transform','translate(-140,'+legendy(.4)+')');
+y_axis.call(yAxis);
+
+var plotgroup = plot.append('g')
+  .attr('class','plot-group');
+
+var line = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(i); })
+  .y(function(d) { return y(d); });
+
+var tsline = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(i); })
+  .y(function(d) { return tsy(d); });
+
+// Add quandrant dividers
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(0))
+  .attr('x2',x(13))
+  .attr('y1',y(.333))
+  .attr('y2',y(.333));
+
+// Add trial event markers
+var eventMarkerGroup = plotgroup.append('svg:g')
+  .attr('class','event-marker-group');
+
+var markers = [{trial_time: 0, angle: -45, name: 'Sample'},
+    {trial_time: 14, angle: -52, name: 'Probe'}];
+
+var markerGroups = eventMarkerGroup.selectAll('.marker-group')
+.data(markers)
+    .enter().append('svg:g')
+    .attr('transform',function(d) {
+        // FIXME Figure out SVG rotate
+        return 'translate('+xAxisScale(d.trial_time+1)+' '+legendy(0)+' ) rotate('+d.angle+' 1 1)';
+        })
+  .attr('class','marker-group');
+
+eventMarkerGroup.selectAll('.marker-labels')
+  .data(markers)
+    .enter().append('svg:text')
+    .style('opacity',0)
+    .attr('class','marker-labels')
+    .attr('transform',function(d) {
+        return 'translate('+xAxisScale(d.trial_time+1)+' '+legendy(.125)+' )';
+        })
+    .text(function(d) { return d.name; });
+
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(.4)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05-.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05+.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:circle')
+  .style('fill','#29ABE2')
+  .attr('r',5)
+  .attr('cx',xAxisScale(.4)-xAxisScale(0))
+  .attr('cy',legendy(.05)-legendy(0));
+
+
+var addTS = function() {
+  plotgroup.append('svg:path')
+    .attr('d',tsline(tsd.map(parseFloat)))
+    .style('stroke','#CCC')
+    .attr('class','ts-line')
+    .style('opacity',0)
+    .style('stroke-width','4px')
+    .style('stroke-dasharray','4 4')
+    .style('z-index','-50');
+}
+
+var addLines = function() {
+  var data_group = plotgroup.selectAll('g.data-group')
+      .data(myd)
+    .enter().append('g')
+      .style('stroke',function(d) { return d.col; })
+      .style('fill',function(d) { return d.col; })
+      .on('mouseover',hideOthers)
+      .on('mouseout',showOthers)
+      .attr('class','data-group');
+
+  data_group.append('svg:path')
+    .attr('d',function(d) { return line(d.vals.map(parseFloat)); })
+    .style('fill','none')
+    .attr('class','fit');
+
+  data_group.append('svg:circle')
+    .style('fill',function(d) {return d.col;})
+    .attr('class','data')
+    .attr('r',8)
+    .attr('cy',function(d,i) { return y((d.vals[i]-.33)*.5+.33); })
+    .attr('cx',function(d,i) { return x(i); });
+
+  update();
+}
+
+var hideOthers = function(d,i) {
+  if (mouseoverOn) {
+    var data_group = plotgroup.selectAll('g.data-group');
+    data_group.filter(function(d,j) { return j != i;})
+      .transition().duration(250).style('opacity',0);
+  }
+}
+
+var showOthers = function(d,i) {
+  if (mouseoverOn) {
+    var data_group = plotgroup.selectAll('g.data-group');
+    data_group.transition().duration(250).style('opacity',1);
+  }
+}
+
+var step = 1;
+var maxStep = 5;
+
+var mouseoverOn = false;
+
+var update = function() {
+  var data_group = plotgroup.selectAll('g.data-group');
+
+  if (step == 0) {
+    d3.select('.ts-line')
+      .transition().duration(500).style('opacity',0);
+    data_group.transition().duration(250).style('opacity',0);
+  } else if (step == 1) {
+    d3.select('.ts-line')
+      .transition().duration(500).style('opacity',1);
+    data_group.transition().duration(250).style('opacity',0);
+  } else if (step == 2) {
+    data_group.filter(function(d,i) { return i == 0;})
+      .transition().duration(500).style('opacity',1);
+    data_group.filter(function(d,i) { return i != 0;})
+      .transition().duration(500).style('opacity',0);
+  } else if (step == 3) {
+    // Movie of sliding
+    data_group.transition().duration(500).style('opacity',0);
+    data_group.transition().duration(1000)
+      .delay(function(d,i) { return i*1000;})
+      .style('opacity',1);
+    data_group.transition().duration(1000)
+      .delay(function(d,i) { return i*1000+1000;})
+      .style('opacity',0);
+  } else if (step == 4) {
+    data_group.transition().duration(500)
+      .style('opacity',0);
+    data_group.filter(function(d,i) { return i == 4 || i == 8;})
+      .transition().duration(500)
+      .style('opacity',1);
+    mouseoverOn = false;
+  } else {
+    mouseoverOn = true;
+    data_group.transition().duration(500)
+      .style('opacity',1);
+    //data_group.transition().duration(250).style('opacity',1);
+  }
+};
+
+var down = function down() {
+  step = step < maxStep ? step+1 : maxStep;
+  update();
+};
+
+var up = function up() {
+  step = step > 0 ? step-1 : 0;
+  update();
+};
+    </script>
+    <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

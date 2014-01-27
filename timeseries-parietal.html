@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>BOLD Timeseries</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <img class="glm" src='media/glm_surf_parietal.png' alt='GLM Results' style='position: absolute; width: 200px; height: auto; top: 0px; left: 750px'>
+          <div id="chart"></div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+var i;
+
+var myd_med_occ = [];
+var myd_lat_occ = [];
+var myd_parietal = [];
+var myd_frontal = [];
+var addCount = 0;
+
+var names = ['Load 1','Load 2','Load 3','Catch 1',' Catch 2','Catch 3'];
+var med_occ_files = ['data/ttatlas_med_occ_top_250_sample_tents_load1.1D',
+             'data/ttatlas_med_occ_top_250_sample_tents_load2.1D',
+             'data/ttatlas_med_occ_top_250_sample_tents_load3.1D',
+             'data/ttatlas_med_occ_top_250_sample_tents_catch1.1D',
+             'data/ttatlas_med_occ_top_250_sample_tents_catch2.1D',
+             'data/ttatlas_med_occ_top_250_sample_tents_catch3.1D'];
+var lat_occ_files = ['data/ttatlas_lat_occ_top_250_sample_tents_load1.1D',
+             'data/ttatlas_lat_occ_top_250_sample_tents_load2.1D',
+             'data/ttatlas_lat_occ_top_250_sample_tents_load3.1D',
+             'data/ttatlas_lat_occ_top_250_sample_tents_catch1.1D',
+             'data/ttatlas_lat_occ_top_250_sample_tents_catch2.1D',
+             'data/ttatlas_lat_occ_top_250_sample_tents_catch3.1D'];
+var parietal_files = ['data/ttatlas_parietal_top_250_sample_tents_load1.1D',
+             'data/ttatlas_parietal_top_250_sample_tents_load2.1D',
+             'data/ttatlas_parietal_top_250_sample_tents_load3.1D',
+             'data/ttatlas_parietal_top_250_sample_tents_catch1.1D',
+             'data/ttatlas_parietal_top_250_sample_tents_catch2.1D',
+             'data/ttatlas_parietal_top_250_sample_tents_catch3.1D'];
+var frontal_files = ['data/ttatlas_frontal_top_250_sample_tents_load1.1D',
+             'data/ttatlas_frontal_top_250_sample_tents_load2.1D',
+             'data/ttatlas_frontal_top_250_sample_tents_load3.1D',
+             'data/ttatlas_frontal_top_250_sample_tents_catch1.1D',
+             'data/ttatlas_frontal_top_250_sample_tents_catch2.1D',
+             'data/ttatlas_frontal_top_250_sample_tents_catch3.1D'];
+var cols = ["#2171B5","#6BAED6","#BDD7E7","#2171B5","#6BAED6","#BDD7E7"];
+var stroke_arrays = ['3','3','3','3 3','3 3','3 3'];
+
+for (i=0; i < 6; i++) {
+  (function() {
+   var tmpi = i;
+    d3.text(med_occ_files[tmpi], function(d) {
+      d = d.split('\n');
+      myd_med_occ.push({load: names[tmpi], col: cols[tmpi], vals: d[1].split(' '), array: stroke_arrays[tmpi]});
+    });
+    d3.text(lat_occ_files[tmpi], function(d) {
+      d = d.split('\n');
+      myd_lat_occ.push({load: names[tmpi], col: cols[tmpi], vals: d[1].split(' '), array: stroke_arrays[tmpi]});
+    });
+    d3.text(parietal_files[tmpi], function(d) {
+      d = d.split('\n');
+      myd_parietal.push({load: names[tmpi], col: cols[tmpi], vals: d[1].split(' '), array: stroke_arrays[tmpi]});
+      addLines();
+    });
+    d3.text(frontal_files[tmpi], function(d) {
+      d = d.split('\n');
+      myd_frontal.push({load: names[tmpi], col: cols[tmpi], vals: d[1].split(' '), array: stroke_arrays[tmpi]});
+    });
+  })();
+}
+
+var padding = 40,
+    width = 900,
+    height = 450,
+    started = false;
+
+var margins = [50, 250, 10, 150],
+    mb = margins[0],
+    ml = margins[1],
+    mt = margins[2],
+    mr = margins[3],
+    w = width - (ml + mr),
+    h = height - (mb + mt);
+
+var x = d3.scale.linear()
+  .domain([0,13])
+  .range([0, w]);
+var y = d3.scale.linear()
+    y.domain([-.25,1])
+  .rangeRound([h, 0]);
+var legendy = d3.scale.linear()
+  .domain([0,1])
+  .rangeRound([h, 0]);
+var legendx = d3.scale.linear()
+  .domain([-50,50])
+  .rangeRound([0, w]);
+var xAxisScale = d3.scale.linear()
+  .domain([-2,24])
+  .range([0, w]);
+
+var xAxis = d3.svg.axis().scale(xAxisScale).ticks(10).orient("bottom");
+var yAxis = d3.svg.axis().scale(y).ticks(5).orient("left");
+
+var lineDemo = d3.select("#chart")
+  .append("svg:svg")
+  .attr("width", width)
+  .attr("height", height+padding);
+
+var plot = lineDemo.append('g')
+  .attr('id','plot')
+  .attr('transform','translate('+ml+','+mt+')');
+
+plot.append('svg:text')
+  .text('Parietal')
+  .attr('transform','translate('+legendx(0)+',10)');
+plot.append('svg:text')
+  .text('(Catch Trials)')
+  .attr('class','catch-label')
+  .style('opacity',0)
+  .attr('transform','translate('+legendx(0)+',40)');
+
+// Add x-axis
+var x_axis = plot.append("g")
+  .attr("class", "x axis")
+  .attr('transform','translate(0,'+h+')');
+x_axis.append('svg:text')
+  .text('Trial timepoint (s)')
+  .attr('transform','translate('+legendx(0)+',80)');
+x_axis.call(xAxis);
+
+// Add y-axis
+var y_axis = plot.append("g")
+  .attr("class", "y axis")
+y_axis.append('svg:text')
+  .style('text-anchor','middle')
+  .text('% BOLD')
+  .attr('transform','translate(-140,'+legendy(.6)+')');
+y_axis.append('svg:text')
+  .style('text-anchor','middle')
+  .text('Signal')
+  .attr('transform','translate(-140,'+legendy(.5)+')');
+y_axis.append('svg:text')
+  .style('text-anchor','middle')
+  .text('Change')
+  .attr('transform','translate(-140,'+legendy(.4)+')');
+y_axis.call(yAxis);
+
+var plotgroup = plot.append('g')
+  .attr('class','plot-group');
+
+var line = d3.svg.line()
+  .interpolate('monotone')
+  .x(function(d,i) { return x(i); })
+  .y(function(d) { return y(d); });
+
+// Add quandrant dividers
+
+plotgroup.append('svg:line')
+  .attr('class','chance-line')
+  .attr('x1',x(0))
+  .attr('x2',x(13))
+  .attr('y1',y(0))
+  .attr('y2',y(0));
+
+// Add trial event markers
+var eventMarkerGroup = plotgroup.append('svg:g')
+  .attr('class','event-marker-group');
+  
+var markers = [{trial_time: 0, angle: -45, name: 'Sample'},
+    {trial_time: 14, angle: -52, name: 'Probe'}];
+
+var markerGroups = eventMarkerGroup.selectAll('.marker-group')
+.data(markers)
+    .enter().append('svg:g')
+    .attr('transform',function(d) {
+        // FIXME Figure out SVG rotate
+        return 'translate('+xAxisScale(d.trial_time+1)+' '+legendy(0)+' ) rotate('+d.angle+' 1 1)';
+        })
+  .attr('class','marker-group');
+
+eventMarkerGroup.selectAll('.marker-labels')
+  .data(markers)
+    .enter().append('svg:text')
+    .attr('class','marker-labels')
+    .style('opacity',0)
+    .attr('transform',function(d) {
+        return 'translate('+xAxisScale(d.trial_time+1)+' '+legendy(.125)+' )';
+        })
+    .text(function(d) { return d.name; });
+
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(.4)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05-.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:line')
+  .attr('class','marker-line')
+  .attr('x1',xAxisScale(2-.7)-xAxisScale(0))
+  .attr('x2',xAxisScale(2-.4)-xAxisScale(0))
+  .attr('y1',legendy(.05+.020)-legendy(0))
+  .attr('y2',legendy(.05)-legendy(0));
+markerGroups.append('svg:circle')
+  .style('fill','#29ABE2')
+  .attr('r',5)
+  .attr('cx',xAxisScale(.4)-xAxisScale(0))
+  .attr('cy',legendy(.05)-legendy(0));
+
+
+var addLines = function() {
+  addCount = addCount + 1;
+  if (addCount == 6) {
+    var data_group = plotgroup.selectAll('g.data-group')
+        .data(myd_parietal.slice(0,-3))
+      .enter().append('g')
+        .style('stroke',function(d) { return d.col; })
+        .style('fill',function(d) { return d.col; })
+        .on('mouseover',hideOthers)
+        .on('mouseout',showOthers)
+        .attr('class','data-group');
+
+    data_group.append('svg:path')
+      .attr('d',function(d) { return line(d.vals.map(parseFloat)); })
+      .style('fill','none')
+      .attr('class','fit');
+
+    var legend_groups = data_group.append('svg:g')
+      .attr('class','legend-group');
+
+    legend_groups.append('svg:line')
+      .attr('x1',legendx(30))
+      .attr('x2',legendx(35))
+      .style('stroke-width','3px')
+      .attr('y1',function(d,i) { return legendy(i/15+.65); })
+      .attr('y2',function(d,i) { return legendy(i/15+.65); })
+      .attr('stroke',function(d) { return d.col; })
+      .attr('class','legend-line');
+
+    legend_groups.append('svg:text')
+      .text(function(d,i) { return d.load;})
+      .attr('x',legendx(43))
+      .attr('y',function(d,i) { return legendy(i/15+.625); });
+
+    // Hide everything
+    data_group.style('opacity',0);
+  }
+}
+
+var switchLines = function(which,set) {
+  var myd;
+  if (which == 'med_occ') {
+    myd = myd_med_occ;
+    y.domain([-.5,1.5])
+  } else if (which == 'lat_occ') {
+    myd = myd_lat_occ;
+    y.domain([-.5,1.5])
+  } else if (which == 'parietal') {
+    myd = myd_parietal;
+    y.domain([-.25,1])
+  } else {
+    myd = myd_frontal;
+    y.domain([-.25,1])
+  }
+
+  plot.select('.y.axis').transition().duration(500).call(yAxis);
+
+  d3.select('.chance-line').transition().duration(500)
+    .attr('y1',y(0))
+    .attr('y2',y(0));
+
+  if (set == 'load') {
+    myd = myd.slice(0,-3);
+  } else {
+    myd = myd.slice(-3);
+  }
+
+  var data_group = plotgroup.selectAll('g.data-group path')
+      .data(myd)
+    .transition().duration(500).attr('d',function(d) { return line(d.vals.map(parseFloat)); })
+}
+
+var hideOthers = function(d,i) {
+  var data_group = plotgroup.selectAll('g.data-group');
+  data_group.filter(function(d,j) { return j != i;})
+    .transition().duration(250).style('opacity',0);
+}
+
+var showOthers = function(d,i) {
+  var data_group = plotgroup.selectAll('g.data-group');
+  data_group.transition().duration(250).style('opacity',1);
+}
+
+var step = 0;
+var maxStep = 4;
+
+var update = function() {
+  var data_group = plotgroup.selectAll('g.data-group');
+
+  // Just markers with labels
+  if (step == 0) {
+    switchLines('parietal','load');
+    plotgroup.selectAll('.marker-labels')
+      .transition().duration(500).style('opacity',0);
+    data_group.transition().duration(500).style('opacity',0);
+  } else if (step == 1) {
+    data_group.filter(function(d,i) { return i != 0;})
+      .transition().duration(500).style('opacity',0);
+    data_group.filter(function(d,i) { return i == 0;})
+      .transition().duration(500).style('opacity',1);
+  } else if (step == 2) {
+    data_group.filter(function(d,i) { return i != 2;})
+      .transition().duration(500).style('opacity',1);
+    data_group.filter(function(d,i) { return i == 2;})
+      .transition().duration(500).style('opacity',0);
+  } else if (step == 3) {
+    switchLines('parietal','load');
+    data_group.transition().duration(500).style('opacity',1);
+    d3.select('.catch-label')
+      .transition().duration(500).style('opacity',0);
+  } else {
+    d3.select('.catch-label')
+      .transition().duration(500).style('opacity',1);
+    switchLines('parietal','catch');
+  }
+};
+
+var down = function down() {
+  step = step < maxStep ? step+1 : maxStep;
+  update();
+};
+
+var up = function up() {
+  step = step > 0 ? step-1 : 0;
+  update();
+};
+
+update();
+    </script>
+    <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

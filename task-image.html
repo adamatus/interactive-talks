@@ -12,38 +12,31 @@
   <body>
     <div id="slide">
       <div id="header">
-          <h1>Recent Work - Multiple Item STM</h1>
+          <h1>Behavioral Task</h1>
       </div>
-      <div id="content-frame">
-        <div id="content" class="minimal-side-pad">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-                  <img class="img-responsive" src='media/motionSeq_task.png' alt="Riggall and Postle Decoding Results">
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                  <img class="img-responsive" src='media/motionSeq_dir_by_load.png' alt="Riggall and Postle Decoding Results">
-              </div>
-            </div>
-          </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <img class="img-responsive" src='media/motionTrans_task_no_trans_blowout.png' alt='Task figure'>
+          <img class="img-responsive" src='media/motionTrans_task.png' alt='Task figure'>
+          <img class="img-responsive" src='media/motionTrans_task_change_blowout.png' alt='Task figure'>
+          <img class="img-responsive" src='media/motionTrans_task_catch.png' alt='Task figure'>
         </div>
-      </div>
-      <div id="footer">
-          <h2>Emrich, Riggall, et al. (2013) J Neurosci</h2>
       </div>
     </div>
     <script>
 var step = 0;
-var maxStep = 1;
+var maxStep = 3;
 
 var update = function() {
   var d;
   if (step == 0) {
-    d = [1,0];
+    d = [1,0,0,0];
   } else if (step == 1) {
-    d = [0,1];
+    d = [0,1,0,0];
+  } else if (step == 2) {
+    d = [0,0,1,0];
+  } else {
+    d = [0,0,0,1];
   }
   d3.selectAll('img')
       .data(d)
@@ -61,8 +54,7 @@ var up = function up() {
 };
 
 update();
-
-</script>
+    </script>
     <script type="text/javascript" src="contrib/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>
