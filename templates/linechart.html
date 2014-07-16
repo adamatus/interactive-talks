@@ -8,7 +8,6 @@
     <link type="text/css" rel="stylesheet" href="/css/charts.css">
     <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
     <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="/js/my-slide.js"></script>
   </head>
   <body>
     <div id="slide">
@@ -84,10 +83,7 @@ plotgroup.append('svg:path')
   .attr('d',line(data))
   .attr('class','data');
 
-var on = 'green',
-    off = 'red';
-
-var up = function up() {
+var swap = function() {
   var tmp = off;
   off = on;
   on = tmp;
@@ -95,10 +91,11 @@ var up = function up() {
     .style("stroke",on);
 };
 
-var down = function down() {
-      up();
-};
+var maxStep = 3;
+
+var update = function() { swap(); };
     </script>
+    <script type="text/javascript" src="/js/my-slide.js"></script>
     <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
   </body>
 </html>

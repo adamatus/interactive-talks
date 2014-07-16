@@ -21,49 +21,62 @@ d3.select(window).on("resize", resize).on("hashchange", function hashchange() {
   that.on("hashchange", hashchange);
 });
 
-resize()
-navigateTo(0);
-
 d3.select(window).on("keydown", function() {
     switch (d3.event.keyCode) {
       case 39: // right arrow
-      case 32: // space
       case 34: { // page down
-        navigateTo(curIndex + 1);
+        //navigateTo(curIndex + 1);
+        navigateForward();
         break;
       }
       case 37: // left arrow
       case 33: { // page up
-        navigateTo(curIndex - 1);
+        //navigateTo(curIndex - 1);
+        navigateBack();
         break;
       }
       case 36: { // home
-        navigateTo(0);
+        //navigateTo(0);
+        navigateToStart();
         break;
       }
       case 35: { // end
-        navigateTo(slides.length-1);
+        //navigateTo(slides.length-1);
+        navigateToEnd();
         break;
       }
       case 38: { // Up
         // Surely a way to d3 this, but don't know it at the moment
-        if (document.getElementById('active').contentWindow.up != null)
-        {
+        if (document.getElementById('active').contentWindow.up != null) {
             document.getElementById('active').contentWindow.up();
         }
         break;
       }
       case 40: { // Down
         // Surely a way to d3 this, but don't know it at the moment
-        if (document.getElementById('active').contentWindow.down != null)
-        {
+        if (document.getElementById('active').contentWindow.down != null) {
             document.getElementById('active').contentWindow.down();
         }
         break;
       }
+      case 32: // space
+        // Surely a way to d3 this, but don't know it at the moment
+        if (document.getElementById('active').contentWindow.down != null) {
+            document.getElementById('active').contentWindow.down(true);
+        } else {
+            navigateForward();
+        }
+        break;
+      case 8: // backspace
+        // Surely a way to d3 this, but don't know it at the moment
+        if (document.getElementById('active').contentWindow.up != null) {
+            document.getElementById('active').contentWindow.up(true);
+        } else {
+            navigateBack();
+        }
+        break;
       case 48: { // 0 key, pop up menu
-        if (!visible)
-        {
+        if (!visible) {
           d3.selectAll("#menu").style("display", "block");
           visible = true;
         } else {
@@ -77,32 +90,27 @@ d3.select(window).on("keydown", function() {
     d3.event.preventDefault();
 });
 
-function resize() {
+var resize = function() {
   d3.select("body").style("margin-top", (window.innerHeight - 768) / 2 + "px");
-}
+};
 
-function navigateToEnd()
-{
+var navigateToEnd = function() {
     navigateTo(slides.length-1);
-}
+};
 
-function navigateToStart()
-{
+var navigateToStart = function() {
     navigateTo(0);
 }
 
-function navigateForward()
-{
+var navigateForward = function() {
     navigateTo(curIndex + 1);
 }
 
-function navigateBack()
-{
+var navigateBack = function() {
     navigateTo(curIndex - 1);
 }
 
-function navigateTo(slide)
-{
+var navigateTo = function(slide) {
     slide = Number(slide);
     curIndex = slide > slides.length - 1 ? 0 : slide;
     curIndex = curIndex < 0 ? slides.length - 1 : curIndex;
@@ -120,8 +128,7 @@ function navigateTo(slide)
 
     d3.select('.current').select('iframe').attr('id','active');
 
-    if (document.getElementById('active').contentWindow.start != null)
-    {
+    if (document.getElementById('active').contentWindow.start != null) {
         document.getElementById('active').contentWindow.start();
     }
 
@@ -132,3 +139,6 @@ function navigateTo(slide)
     d3.selectAll("#menu").style("display", "none");
     visible = false;
 }
+
+resize();
+navigateTo(0);
