@@ -141,4 +141,9 @@ var navigateTo = function(slide) {
 }
 
 resize();
-navigateTo(0);
+
+if (location.hash !== "") {
+  navigateTo(+location.hash.substring(1));
+} else {
+  navigateTo(0);
+}
