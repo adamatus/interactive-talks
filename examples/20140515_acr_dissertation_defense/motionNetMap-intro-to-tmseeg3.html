@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>TMS-ER Shows Differences Between Cognitive States</h1>
+      </div>
+      <div id="content-frame" class='with-both'>
+        <div id="content" class='center'>
+          <img src='media/tmseeg_load_after_training.png' alt='Task figure'
+          class='tall' style="height: 400px;">
+        </div>
+      </div>
+      <div id="footer">
+          <h2>Kundu et al. (2013) J Neurosci</h2>
+      </div>
+    </div>
+    <script>
+var step = 0;
+var maxStep = 0;
+
+var update = function() {
+  var d;
+  if (step == 0) {
+    d = [1,0,0,0];
+  } else if (step == 1) {
+    d = [0,1,0,0];
+  } else if (step == 2) {
+    d = [0,0,1,0];
+  } else {
+    d = [0,0,0,1];
+  }
+  d3.selectAll('img')
+      .data(d)
+    .style('display',function(d) { return d==1 ? 'inline' : 'none'; });
+};
+    </script>
+  </body>
+</html>

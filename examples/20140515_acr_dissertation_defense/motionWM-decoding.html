@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <link type="text/css" rel="stylesheet" href="css/button.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="data/motionWM-decoding-data.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header" style="z-index: -1">
+          <h1>Expt 1: Decoding Results</h1>
+      </div>
+      <div id="controls">
+          <span id="who" style="padding-left:100px"><button class="first active">Direction
+                  Trials</button><button>Speed
+                  Trials</button><button class="last">Cue
+                  Decoding</button></span>
+      </div>
+      <div id="content-frame" class='with-both'>
+          <div id="content">
+          <span id="what">
+              <button class="first last active" style='position: absolute; top: 100px; left: -450px; z-index: 4;'>Wholebrain</button>
+              <button class='first last' style='position: absolute; top: -25px; left: -400px; z-index: 5; display: none;'>Frontal</button>
+              <button class='first last' style='position: absolute; top: -25px; left: -100px; z-index: 5; display: none;'>Parietal</button>
+              <button class='first last' style='position: absolute; top: 150px; left: -250px; z-index: 4; display: none;'>Lat Occ</button>
+              <button class="first last" style='position: absolute; top: 100px; left: -100px; z-index: 4; display: none;'>Med Occ</button>
+          </span>
+              <img src='media/surf_results_lh_delay_lat_trim.png' style='position: absolute; top: -25px; left: 600px; width: 300px; height: auto'>
+              <div id="chart">
+                  <!-- Plot gets inserted in here -->
+              </div>
+          </div>
+      </div>
+      <div id="footer">
+          <h2>Riggall &amp; Postle (2012) J Neurosci</h2>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+var width = 900;
+    height = 650;
+
+var margins = [80, 100, 100, 30], mb = margins[0], ml = margins[1], mt = margins[2], mr = margins[3];
+var w = width - (ml + mr),
+    h = height - (mb + mt);
+var x = d3.scale.linear().range([0, w]).domain([0,16]);
+var y = d3.scale.linear().range([h, 0]).domain([0,75]);
+var yAxis = d3.svg.axis().scale(y).ticks(4).orient("left");
+var yAxisGrid = d3.svg.axis().scale(y).ticks(4).tickSize(-w).orient("right");
+
+var bar_width = 100;
+
+var svg = d3.select('#chart').append('svg:svg')
+    .attr('class', 'chart')
+    .attr("width", width)
+    .attr("height", height);
+
+var dirs = mydata['WholebrainGLM']['dir'];
+var spds = mydata['WholebrainGLM']['spd'];
+var task = mydata['WholebrainGLM']['task'];
+
+var line = function() {};
+    line = d3.svg.line()
+        //.interpolate('monotone')
+        .interpolate('linear')
+        .x(function(d,i) { return x(i); })
+        .y(function(d) { return y(d*100); });
+
+    var plot = svg.append('g').attr('id','plot').attr('transform','translate('+ml+','+mt+')');
+
+    var dataRegion = plot.append('g').attr('id','data-region');
+
+
+    var trs = dataRegion.selectAll('.tr')
+            .data(dirs)
+        .enter().append('svg:g')
+                .style('opacity',0)
+                .classed('tr',true);
+
+    trs.append('svg:path')
+                    .classed('data-line',true)
+                    .style('fill','none')
+                    .style('stroke-width',6)
+                    .style('stroke',function(d,i) { return cols[i]; })
+                    .attr('d',function(d,i) { return line(dirs[i].slice(2,18).concat(dirs[i][0])); })
+
+    // X-axis bounding boxes
+    trs.append('svg:rect')
+            .style('fill',function(d,i) { return cols[i]; })
+            .style('opacity',.5)
+            .classed('bg',true)
+            .attr('width',(x(1)-x(0)))
+            .attr('height',h)
+            .style('z-index',-5)
+            .attr('x',function(d,i) { return x(i-.5); })
+            .attr('y',function(d) { return y(75); })
+            //.on('mouseover',function(d,i) {
+            //    d3.selectAll('.data-line')
+            //        .filter(function(d,j) { return i != j; })
+            //        .transition().duration(500)
+            //        .style('opacity',.25);
+            //    d3.selectAll('.data-line')
+            //        .filter(function(d,j) { return i == j; })
+            //        .transition().duration(500)
+            //        .style('stroke-width',12);
+            //        })
+            //.on('mouseout',function(d,i) {
+            //    d3.selectAll('.data-line')
+            //        .filter(function(d,j) { return i != j; })
+            //        .transition().duration(500)
+            //        .style('opacity',1);
+            //    d3.selectAll('.data-line')
+            //        .filter(function(d,j) { return i == j; })
+            //        .transition().duration(500)
+            //        .style('stroke-width',6);
+            //        });
+
+        var box = plot.selectAll('g.box')
+            //.data([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
+            .data([-2,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30])
+        .enter().append('svg:g')
+            .classed('box',true);
+
+    box.append('svg:rect')
+            .style('fill','black')
+            .style('stroke','black')
+            .classed('left-wall',true)
+            .attr('width',2)
+            .attr('height',10)
+            .attr('x',function(d,i) { return x(i); })
+            .attr('y',function(d) { return y(0); });
+
+//    box.append('svg:rect')
+//            .style('fill','black')
+//            .style('stroke','none')
+//            .classed('right-wall',true)
+//            .attr('width',1)
+//            .attr('height', 30)
+//            .attr('x',function(d,i) { return x(i+.5); })
+//            .attr('y',function(d) { return y(0); });
+
+    box.append('svg:text')
+            .text(function(d,i) { return d; })
+            .attr('x',function(d,i) { return x(i); })
+            .attr('y',function(d) { return y(0)+32; })
+                .on('click',function(d,i) { toggle(i+1);});
+
+    // Add y-axis
+    plot.append("g")
+          .attr("class", "y axis")
+          .call(yAxis);
+    plot.select('.y.axis').append('svg:text')
+        .attr('id','ylab')
+        .text('Direction Decoding Accuracy')
+        .style('text-anchor','middle')
+        .attr('transform','translate(-65,'+(h/2)+') rotate(-90)');
+
+    // Add x-axis
+    plot.append("g")
+          .attr("class", "x axis")
+          .append('svg:line')
+            .attr('x2',w)
+            .attr('y1',h)
+            .attr('y2',h)
+            .style('stroke-width',3)
+            .style('stroke','black');
+    plot.select('.x.axis').append('svg:text')
+        .text('Trial Time (s)').style('text-anchor','middle')
+        .attr('transform','translate('+(w/2)+','+(h+70)+') ');
+
+    dataRegion.append('svg:rect')
+            .style('fill','#777')
+            .style('stroke','#000')
+            .style('stroke-width','3px')
+            .style('fill-opacity',1)
+            .attr('width',(x(4)-x(0)))
+            .attr('height',30)
+            .attr('x',function(d,i) { return x(5); })
+            .attr('y',function(d) { return y(0)-30; });
+
+    dataRegion.append('svg:text')
+            .text('Target')
+            .attr('x',function(d,i) { return x(1.5); })
+            .attr('y',function(d) { return y(0)-40; });
+
+    dataRegion.append('svg:text')
+            .text('Probe')
+            .attr('x',function(d,i) { return x(9.5); })
+            .attr('y',function(d) { return y(0)-40; });
+
+    dataRegion.append('svg:text')
+            .text('Cue')
+            .attr('x',function(d,i) { return x(7); })
+            .attr('y',function(d) { return y(0)-40; });
+
+    // Sample
+    dataRegion.append('svg:rect')
+            .style('fill','#777')
+            .style('stroke','#000')
+            .style('stroke-width','3px')
+            .style('fill-opacity',1)
+            .attr('width',(x(1)-x(0)))
+            .attr('height',30)
+            .attr('x',function(d,i) { return x(1); })
+            .attr('y',function(d) { return y(0)-30; });
+
+    dataRegion.append('svg:rect')
+            .style('fill','#777')
+            .style('stroke','#000')
+            .style('fill-opacity',1)
+            .style('stroke-width','3px')
+            .attr('width',(x(1)-x(0)))
+            .attr('height',30)
+            .attr('x',function(d,i) { return x(9); })
+            .attr('y',function(d) { return y(0)-30; });
+
+    // Chance
+    plot.append('svg:line')
+            .attr('id','chance-line')
+            .style('stroke-dasharray','5,3')
+            .style('stroke','black')
+            .style('stroke-width','2px')
+            .attr('x2',w)
+            .attr('y1',y(25))
+            .attr('y2',y(25));
+
+ var state = 'dir';
+var chance = 25;
+ var redraw = function(to) {
+     var ylab = ''
+     switch(to) {
+         case 'dir':
+             myd = dirs;
+             state = 'dir';
+             chance = 25;
+             y.domain([0,75]);
+             ylab='Direction Decoding Accuracy';
+             break;
+         case 'spd':
+             myd = spds;
+             state = 'spd';
+             chance = 25;
+             y.domain([0,75]);
+             ylab='Direction Decoding Accuracy';
+             break;
+         case 'task':
+             myd = task;
+             state = 'task';
+             chance = 50;
+             y.domain([0,100]);
+             ylab='Task Decoding Accuracy';
+             break;
+     }
+    d3.select('#ylab').text(ylab);
+
+    plot.select('.y.axis').transition().duration(500).call(yAxis);
+     plot.select('#chance-line')
+          .transition().duration(500).ease('linear')
+             .attr('y1',y(chance))
+                .attr('y2',y(chance));
+
+     d3.selectAll('path.data-line').transition().duration(500).ease('linear')
+         .attr('d',function(d,i) { return line(myd[i].slice(2,18).concat(myd[i][0])); });
+
+
+ };
+
+var visible = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+var toggle = function(n) {
+    visible[n-1] = visible[n-1] == 1 ? 0 : 1;
+
+    d3.selectAll('.tr')
+        .filter(function(d,j) { return [n-1] == j;
+            })
+        .style('opacity',visible[n-1]);
+}
+
+d3.selectAll("#who button")
+        .data(['dir','spd','task'])
+        .on("click",function(w) {
+            redraw(w);
+            d3.selectAll('#who button')
+                .classed('active',function(d) { return d == w; });
+                });
+
+    d3.selectAll("#what button")
+        .data(['WholebrainGLM','FrontalDelay','ParietalDelay','HigherVisNoDel','EarlyVisNoDel'])
+        .on("click",function(w) {
+            dirs = mydata[w]['dir'];
+            spds = mydata[w]['spd'];
+            task = mydata[w]['task'];
+
+            redraw(state);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == w; });
+        });
+
+var count = 0;
+
+var step = 0;
+var maxStep = 7;
+// FIXME: Step through results
+
+var up = function(prevSlide) {
+    prevSlide = typeof prevSlide !== 'undefined' ? prevSlide : false;
+
+    if (step === 0) {
+        if (prevSlide) window.parent.navigateBack();
+    } else {
+        step = step > 0 ? step-1 : 0;
+        if (step == 0 ) {
+            d3.selectAll('#what button').filter(function(d,i) { return i!=0; }).style('display','none');
+        }
+    }
+};
+
+var down = function(nextSlide) {
+    nextSlide = typeof nextSlide !== 'undefined' ? nextSlide : false;
+
+    if (step < maxStep) {
+        step = step < maxStep ? step+1 : maxStep;
+        if (step == 1) {
+            toggle(4);
+        } else if (step == 2) {
+            toggle(10);
+            toggle(12);
+        } else if (step == 3) {
+            d3.selectAll('#what button').filter(function(d,i) { return i!=1; }).style('display','none');
+            d3.selectAll('#what button').filter(function(d,i) { return i==1; }).style('display','block');
+            dirs = mydata['FrontalDelay']['dir'];
+            spds = mydata['FrontalDelay']['spd'];
+            task = mydata['FrontalDelay']['task'];
+            redraw(state);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == 'FrontalDelay'; });
+        } else if (step == 4) {
+            d3.selectAll('#what button').filter(function(d,i) { return i!=2; }).style('display','none');
+            d3.selectAll('#what button').filter(function(d,i) { return i==2; }).style('display','block');
+            dirs = mydata['ParietalDelay']['dir'];
+            spds = mydata['ParietalDelay']['spd'];
+            task = mydata['ParietalDelay']['task'];
+            redraw(state);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == 'ParietalDelay'; });
+        } else if (step == 5) {
+            d3.selectAll('#what button').filter(function(d,i) { return i!=3; }).style('display','none');
+            d3.selectAll('#what button').filter(function(d,i) { return i==3; }).style('display','block');
+            dirs = mydata['HigherVisNoDel']['dir'];
+            spds = mydata['HigherVisNoDel']['spd'];
+            task = mydata['HigherVisNoDel']['task'];
+            redraw(state);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == 'HigherVisNoDel'; });
+        } else if (step == 6) {
+            d3.selectAll('#what button').filter(function(d,i) { return i!=4; }).style('display','none');
+            d3.selectAll('#what button').filter(function(d,i) { return i==4; }).style('display','block');
+            dirs = mydata['EarlyVisNoDel']['dir'];
+            spds = mydata['EarlyVisNoDel']['spd'];
+            task = mydata['EarlyVisNoDel']['task'];
+            redraw(state);
+            d3.selectAll('#what button')
+                .classed('active',function(d) { return d == 'EarlyVisNoDel'; });
+        } else if (step == 7) {
+            d3.selectAll('#what button').style('display','block');
+        }
+    } else {
+        if (nextSlide) window.parent.navigateForward();
+    }
+};
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

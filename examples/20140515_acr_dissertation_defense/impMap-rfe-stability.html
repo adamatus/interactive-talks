@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <style>
+        img.photo {margin-top: -220px; margin-left: -300px; position: absolute; opacity: 0;}
+    </style>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>RFE Timepoint-by-Timepoint Stability</h1>
+      </div>
+      <div id="content-frame" class='with-header'>
+          <div id="content" class='center'>
+        <img class='photo' src="media/timepoint-overlap1.png" style="opacity:1;">
+        <img class='photo' src="media/timepoint-overlap2.png">
+        <img class='photo' src="media/timepoint-overlap3.png">
+        <img class='photo' src="media/timepoint-overlap4.png">
+          </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+var step = 0;
+var maxStep = 3;
+d3.selectAll('.photo').data(d3.range(maxStep));
+
+var update = function() {
+    d3.selectAll('.photo').filter(function(d,i) { return i <= step; }).transition().duration(0).style('opacity',1);
+    d3.selectAll('.photo').filter(function(d,i) { return i > step; }).transition().duration(0).style('opacity',0);
+};
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

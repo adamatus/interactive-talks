@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Expt 2: Behavioral Results</h1>
+      </div>
+      <div id="content-frame" class='with-both'>
+          <div id="content">
+              <img src="media/bays_hussain.png" class='wide'>
+              <img src="media/motionSeq_behave.png" class='wide'>
+              <img src='media/cover.png' id='cover1' style='position: absolute; height: 300px; width: 620px; top: 345px; left: 0px;'>
+              <img src='media/cover.png' id='cover2' style='position: absolute; height: 300px; width: 330px; top: 345px; left: 620px;'>
+          </div>
+      </div>
+      <div id="footer">
+          <h2>Emrich, Riggall, et al. (2013) J Neurosci</h2>
+      </div>
+    </div>
+    <script type="text/javascript">
+var step = 0;
+var maxStep = 2;
+
+var up = function(prevSlide) {
+    prevSlide = typeof prevSlide !== 'undefined' ? prevSlide : false;
+
+    if (step === 0) {
+        if (prevSlide) window.parent.navigateBack();
+    } else {
+        step = step > 0 ? step-1 : 0;
+        if (step == 0)
+        {
+            d3.select('#cover1').style('display','inline');
+        } else if (step == 1) {
+            d3.select('#cover2').style('display','inline');
+        }
+    }
+};
+
+var down = function(nextSlide) {
+    nextSlide = typeof nextSlide !== 'undefined' ? nextSlide : false;
+
+    if (step < maxStep) {
+        step = step < maxStep ? step+1 : maxStep;
+        if (step == 1) {
+            d3.select('#cover1').style('display','none');
+        } else if (step == 2) {
+            d3.select('#cover2').style('display','none');
+        }
+    } else {
+        if (nextSlide) window.parent.navigateForward();
+    }
+};
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

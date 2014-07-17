@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <style>
+        img.photo {margin-top: -320px; margin-left: 0px; position: absolute; opacity: 0;}
+    </style>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>TMS-Evoked Response</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content">
+          <img class="photo" src='media/example-currents1.png' alt='Task figure'>
+          <img class="photo" src='media/example-currents2.png' alt='Task figure'>
+          <img class="photo" src='media/example-currents3.png' alt='Task figure'>
+        </div>
+      </div>
+    </div>
+    <script>
+
+var step = 0;
+var maxStep = 2;
+d3.selectAll('.photo').data(d3.range(maxStep));
+
+var update = function() {
+    d3.selectAll('.photo').filter(function(d,i) { return i <= step; }).transition().duration(0).style('opacity',1);
+    d3.selectAll('.photo').filter(function(d,i) { return i > step; }).transition().duration(0).style('opacity',0);
+};
+
+update();
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

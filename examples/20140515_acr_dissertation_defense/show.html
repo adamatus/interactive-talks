@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dissertation Defense Public Talk</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/contrib/bootstrap/css/bootstrap-theme.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/show.css">
+    <script type="text/javascript" src="/contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/contrib/jquery/jquery-2.0.3.min.js"></script>
+  </head>
+  <body>
+    <div id="menu">
+      <form>
+        <select id="navigator" onchange="navigateTo(this.options[this.selectedIndex].value)">
+        </select>
+      </form>
+    </div>
+    <script type="text/javascript">
+var slides = [
+  {title:"Title Page",loc:"title.html"},
+  //{title:"Overview",loc:"overview.html"},
+  {title:"Motion on the Water",loc:"oracle-stuffing.html"},
+  {title:"MotionWM Task",loc:"motionWM-task.html"},
+  {title:"MotionWM GLM",loc:"motionWM-glm.html"},
+  //{title:"MotionWM Question",loc:"motionWM-question.html"},
+  //{title:"Frontoparietal Elevated Activity",loc:"srimal-curtis-odr.html"},
+  {title:"Introduction to Activation",loc:"intro-to-activity-based.html"},
+  {title:"Introduction to Classification",loc:"intro-to-classification.html"},
+  {title:"Temporal Cross-generalization",loc:"temporal-cross-gen.html"},
+  {title:"MotionWM Hypothesis",loc:"motionWM-hypothesis.html"},
+  {title:"MotionWM Decoding",loc:"motionWM-decoding.html"},
+  {title:"MotionWM Summary",loc:"motionWM-summary.html"},
+  {title:"MotionSeq Question",loc:"motionSeq-question.html"},
+  {title:"MotionSeq Inspiration",loc:"todd-and-marois.html"},
+  {title:"MotionSeq Hypothesis",loc:"motionSeq-hypothesis.html"},
+  {title:"MotionSeq Task",loc:"motionSeq-task.html"},
+  {title:"MotionSeq Behave",loc:"motionSeq-behave.html"},
+  {title:"MotionSeq GLM",loc:"motionSeq-glm.html"},
+  {title:"MotionSeq Decoding",loc:"motionSeq-decoding.html"},
+  {title:"MotionSeq Decoding (By Load)",loc:"motionSeq-decoding-load.html"},
+  {title:"MotionSeq Prec by Sub",loc:"motionSeq-prec-by-sub.html"},
+  {title:"MotionSeq Summary",loc:"motionSeq-summary.html"},
+  {title:"MotionSeq Limitations",loc:"motionSeq-limitations.html"},
+  //{title:"MotionTrans Question",loc:"motionTrans-question.html"},
+  {title:"MotionTrans Task",loc:"motionTrans-task.html"},
+  {title:"MotionTrans Behave",loc:"motionTrans-behave.html"},
+  {title:"MotionTrans Behave Fits",loc:"motionTrans-behave-fits.html"},
+  {title:"MotionTrans GLM",loc:"motionTrans-glm.html"},
+  {title:"MotionTrans Decode Dir",loc:"motionTrans-decode-dir.html"},
+  {title:"MotionTrans Decode Dir Lat Occ",loc:"motionTrans-decode-dir-lat-occ.html"},
+  {title:"MotionTrans Decode Dir Parietal",loc:"motionTrans-decode-dir-parietal.html"},
+  {title:"MotionTrans Decode Dir Frontal",loc:"motionTrans-decode-dir-frontal.html"},
+  {title:"MotionTrans Decode Dir by Load",loc:"motionTrans-decode-dir-by-load.html"},
+  {title:"MotionTrans Summary",loc:"motionTrans-summary.html"},
+  {title:"ImpMap Question",loc:"impMap-question.html"},
+  {title:"ImpMap Movie",loc:"impMap-movie.html"},
+  {title:"ImpMap Question2",loc:"impMap-question2.html"},
+  {title:"ImpMap RFE Intro",loc:"impMap-rfe-intro.html"},
+  {title:"ImpMap RFE Results",loc:"impMap-rfe-results.html"},
+  {title:"ImpMap RFE Temporal Stability",loc:"impMap-rfe-stability.html"},
+  {title:"Interim Summary",loc:"interim-summary.html"},
+  {title:"MotionNetMap Question",loc:"motionNetMap-question.html"},
+  {title:"MotionNetMap Inspiration",loc:"ikkai-curtis.html"},
+  {title:"MotionNetMap Inspiration 2",loc:"jerde.html"},
+  {title:"MotionNetMap Hypothesis",loc:"motionNetMap-hypothesis.html"},
+  {title:"MotionNetMap Task BOLD",loc:"motionNetMap-task.html"},
+  {title:"MotionNetMap Behave BOLD",loc:"motionNetMap-behave-bold.html"},
+  {title:"MotionNetMap GLM",loc:"motionNetMap-glm.html"},
+  {title:"MotionNetMap Overlap",loc:"motionNetMap-overlap.html"},
+  {title:"MotionNetMap Intro to TMS",loc:"intro-to-tms.html"},
+  {title:"MotionNetMap Intro to TMS/EEG1",loc:"motionNetMap-intro-to-tmseeg.html"},
+  //{title:"MotionNetMap TMS-ER Movie",loc:"motionNetMap-tmser-movie.html"},
+  {title:"MotionNetMap Intro to TMS/EEG2",loc:"motionNetMap-intro-to-tmseeg2.html"},
+  {title:"MotionNetMap Intro to TMS/EEG3",loc:"motionNetMap-intro-to-tmseeg3.html"},
+  {title:"MotionNetMap Hypothesis2",loc:"motionNetMap-hypothesis2.html"},
+  {title:"MotionNetMap Task TMS/EEG",loc:"motionNetMap-task-eeg.html"},
+  {title:"MotionNetMap Behave TMS/EEG",loc:"motionNetMap-behave-eeg.html"},
+  {title:"MotionNetMap Intro to Casali Measures",loc:"motionNetMap-intro-to-casali.html"},
+  {title:"MotionNetMap Casali Results",loc:"motionNetMap-casali-results.html"},
+  {title:"MotionNetMap Summary",loc:"motionNetMap-summary.html"},
+  {title:"Summary",loc:"summary.html"},
+  {title:"Thanks",loc:"thanks.html"},
+//  {title:"ImpMap NPS Intro",loc:"impMap-nps-intro.html"},
+  {title:"ImpMap NPS Results",loc:"impMap-nps-results.html"},
+  {title:"ImpMap MultiTR Training",loc:"impMap-multitr-decoding.html"},
+  {title:"MotionTrans BOLD Timeseries",loc:"motionTrans-bold-ts.html"},
+  {title:"MotionTrans Decode Load",loc:"motionTrans-decode-load.html"},
+];
+    </script>
+    <script type="text/javascript" src="/js/my-show.js"></script>
+    <script type="text/javascript" src="/contrib/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

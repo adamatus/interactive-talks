@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <style>
+        .photo {position: absolute; padding-top: 100px; padding-left: 100px; opacity: 0;}
+    </style>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Expt 4: Behavioral Results (TMS/EEG)</h1>
+      </div>
+        <img class='photo' src="media/behave-resp1.png" style="opacity: 1;">
+        <img class='photo' src="media/behave-resp2.png">
+        <img class='photo' src="media/behave-resp3.png">
+        <img class='photo' src="media/behave-resp4.png">
+    </div>
+    <script type="text/javascript">
+var step = 0;
+var maxStep = 3;
+d3.selectAll('.photo').data(d3.range(maxStep));
+
+var update = function() {
+    d3.selectAll('.photo').filter(function(d,i) { return i == step; }).transition().duration(0).style('opacity',1);
+    d3.selectAll('.photo').filter(function(d,i) { return i != step; }).transition().duration(0).style('opacity',0);
+};
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

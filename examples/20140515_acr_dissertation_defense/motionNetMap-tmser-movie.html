@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="contrib/jquery/jquery-2.0.3.min.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>TMS-Evoked Response</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+          <div id="content" class="center">
+              <video width="560" height="420">
+                <source src="media/SigCurrents_aboveleft.mp4" type="video/mp4" />
+              </video>
+          </div>
+      </div>
+      <div id="footer">
+          <h2></h2>
+      </div>
+    </div>
+    <script type="text/javascript">
+var a =[];
+
+var playMovie = function() {
+    a = $('video');
+    a.get(0).play();
+}
+
+var replayMovie = function() {
+    $('video').load();
+    setTimeout(playMovie,300);
+};
+
+var step = 0;
+var maxStep = 1;
+
+var update = function() {
+    replayMovie();
+};
+
+// FIXME: Get better movie, show TMS loc, TMS-PULSE timing
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

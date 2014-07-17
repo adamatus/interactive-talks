@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+  </head>
+  <body>
+    <div id="slide">
+      <div id="header">
+          <h1>Expt 3: Univariate GLM Results</h1>
+      </div>
+      <div id="content-frame" class='with-only-head'>
+        <div id="content" class="center">
+          <img class="glm" src='media/glm_surf.png' alt='GLM Results'>
+          <h2 style='position: absolute; top: 350px; left: 800px'></h2>
+          <img class="glm" src='media/glm_surf_med_occ.png' alt='GLM Results'>
+          <h2 style='position: absolute; top: 350px; left: 800px'>Medial Occipital</h2>
+          <img class="glm" src='media/glm_surf_lat_occ.png' alt='GLM Results'>
+          <h2 style='position: absolute; top: 625px; left: 200px'>Lateral Occipital + Temporal</h2>
+          <img class="glm" src='media/glm_surf_parietal.png' alt='GLM Results'>
+          <h2 style='position: absolute; top: 200px; left: 750px'>Parietal</h2>
+          <img class="glm" src='media/glm_surf_frontal.png' alt='GLM Results'>
+          <h2 style='position: absolute; top: 100px; left: 63px'>Frontal</h2>
+          <img class="glm" src='media/glm-key.png' alt='GLM Results' style='position: absolute; top: 400px; left: 10px;'>
+        </div>
+      </div>
+    </div>
+    <script>
+var step = 0;
+var maxStep = 0;
+
+var update = function() {
+  var d,l;
+  if (step == 0) {
+    d = [1,0,0,0,0];
+    l = [1,0,0,0,0];
+  } else if (step == 1) {
+    d = [0,1,0,0,0];
+    l = [0,1,0,0,0];
+  } else if (step == 2) {
+    d = [0,0,1,0,0];
+    l = [0,0,1,0,0];
+  } else if (step == 3) {
+    d = [0,0,0,1,0];
+    l = [0,0,0,1,0];
+  } else if (step == 4) {
+    d = [0,0,0,0,1];
+    l = [0,0,0,0,1];
+  } else {
+    d = [1,0,0,0,0];
+    l = [1,1,1,1,1];
+  }
+  d3.selectAll('img.glm')
+      .data(d)
+    .style('display',function(d) { return d==1 ? 'inline' : 'none'; });
+
+  d3.selectAll('#content h2')
+      .data(l)
+    .style('display',function(d) { return d==1 ? 'inline' : 'none'; });
+};
+
+update();
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>

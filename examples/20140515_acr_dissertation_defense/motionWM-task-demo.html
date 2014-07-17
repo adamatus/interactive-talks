@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <link type="text/css" rel="stylesheet" href="css/charts.css">
+    <link type="text/css" rel="stylesheet" href="css/colorbrewer.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </head>
+  <body class="inverted">
+      <div id="slide">
+      <div id="header" class="inverted">
+          <h1></h1>
+      </div>
+      <div id="content-frame" class=''>
+          <div id="content">
+          <div id="chart">
+          </div>
+      </div>
+  </div>
+      <script type="text/javascript">
+
+var margin = {top: 0, right: 0, bottom: 0, left: 0},
+        width = 960 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom,
+        patch_radius = 350;
+
+    var x = d3.scale.linear().domain([0, 1000])
+        .range([width/2-(patch_radius+200),width/2+(patch_radius+200)]);
+
+    var y = d3.scale.linear().domain([0, 1000])
+        .range([height/2-(patch_radius+200),height/2+(patch_radius+200)]);
+
+    // Randomly position dots
+    var dots = [];
+    for (var i = 0; i < 500; i++) {
+        dots.push({"x":Math.random()*1000,"y":Math.random()*1000});
+    };
+
+    var svg = d3.select('#chart').append('svg:svg')
+        .attr('class', 'chart')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("svg:g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Create aperture for dots
+    svg.append("clipPath")
+        .attr('id','clip')
+      .append('svg:circle')
+        .attr('cx',width/2)
+        .attr('cy',height/2)
+        .attr('r',250);
+
+    svg.append("svg:g")
+      .attr("clip-path","url(#clip)")
+      .style('fill','black')
+      .attr('id','dot-patch');
+
+    // Draw fixation
+    var fix = svg.append("svg:g")
+      .attr('id','fixation')
+      .attr('transform','translate('+width/2+','+height/2+')')
+      .style('fill','#AAA')
+      .style('stroke','none');
+
+    fix.selectAll('rect')
+        .data([{'w':8,'h':80},{'w':80,'h':8}])
+      .enter().append('svg:rect')
+        .attr('width',function(d) { return d.w; })
+        .attr('height',function(d) { return d.h; })
+        .style('fill-opacity',1)
+        .attr('transform',function(d) { return 'translate(-'+(d.w/2)+',-'+(d.h/2)+')'; });
+
+    // Draw hidden dots
+    d3.select('#dot-patch').selectAll('.dots')
+          .data(dots)
+        .enter().append('svg:circle')
+          .classed('dots',true)
+          .attr('cx',function(d) { return x(d.x); })
+          .attr('cy',function(d) { return y(d.y); })
+          .attr('r',4);
+
+var runTrial = function() {
+    // Trial parameters
+    var dirs = [44,168,292],
+        spds = [75,125,200],
+        dir = dirs[Math.floor(Math.random()*3)],
+        speed = spds[Math.floor(Math.random()*3)],
+        tx = Math.sin(dir*(Math.PI/180))*speed,
+        ty = Math.cos(dir*(Math.PI/180))*speed;
+
+    var header = d3.select('#header');
+    header.transition().duration(500)
+        .ease('linear')
+        .style('color','#000');
+
+    // Get ready fixation
+    var fix = d3.select('#fixation');
+    fix.transition().duration(0)
+      .delay(1000)
+      .style('fill','#FFF');
+
+    // Sample dots
+    var patch = d3.select('#dot-patch');
+    var drawnDots = patch.selectAll('.dots');
+    patch.transition().duration(0)
+      .delay(2000)
+      .style('fill','#FFF');
+    drawnDots.transition().duration(1000)
+        .delay(2000).ease('linear')
+        .attr("transform","translate("+tx+","+ty+")");
+    patch.transition().duration(0)
+      .delay(3000)
+      .style('fill','#000');
+    drawnDots.transition().duration(0)
+        .delay(3000).ease('linear')
+        .attr("transform","translate(0,0)");
+
+    // Task Cue
+    fix.transition().duration(0)
+      .delay(8000)
+//      .style('fill','rgb(230,91,1)'); // Orange
+      .style('fill','rgb(94,60,153)'); // Purple
+
+    // Test fixation
+    fix.transition().duration(0)
+      .delay(15000)
+      .style('fill','#FFF');
+
+    // Test dots
+    patch.transition().duration(0)
+      .delay(15000)
+      .style('fill','#FFF');
+    drawnDots.transition().duration(1000)
+        .delay(15000).ease('linear')
+        .attr("transform","translate("+tx+","+ty+")");
+    patch.transition().duration(0)
+      .delay(16000)
+      .style('fill','#000');
+    drawnDots.transition().duration(0)
+        .delay(16000).ease('linear')
+        .attr("transform","translate(0,0)");
+
+    fix.transition().duration(0)
+      .delay(17000)
+      .style('fill','green');
+
+    fix.transition().duration(0)
+      .delay(19000)
+      .style('fill','#AAA');
+
+    header.transition().duration(500)
+      .delay(19000)
+      .ease('linear')
+      //.style('opacity',1);
+      .style('color','#FFF');
+
+};
+
+var up = function() {
+    runTrial();
+};
+
+var down = function() {
+    runTrial();
+};
+
+      </script>
+  </div>
+  </body>
+
+</html>

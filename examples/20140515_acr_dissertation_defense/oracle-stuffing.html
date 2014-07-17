@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" rel="stylesheet" href="css/slide.css">
+    <script type="text/javascript" src="contrib/d3/d3.v3.min.js"></script>
+    <style>
+        #slide {padding-left:0px; padding-right: 0px;}
+    </style>
+  </head>
+  <body class='inverted'>
+    <div id="slide">
+        <img class='photo' src="media/jk-1.jpg" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 1;">
+        <img class='photo' src="media/jk-2.jpg" style="height: 120%; width: auto; margin-left:175px; margin-top:-100px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/fleet-bear-away.jpg" style="height: 100%; width: auto; margin-left:0px; margin-top:0px; position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1.jpg" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1-tb1.png" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1-tb2.png" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1-tb3.png" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-1-tb4.png" style="height: 110%; width: auto; margin-left:-40px; margin-top:-25px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-3.jpg" style="height: 100%; width: auto; margin-left:-70px; margin-top:0px;position: absolute; opacity: 0;">
+        <img class='photo' src="media/jk-4.jpg" style="height: 100%; width: auto; margin-left:-115px; margin-top:0px;position: absolute; opacity: 0;">
+    </div>
+    <script type="text/javascript">
+var step = 0;
+var maxStep = 9;
+d3.selectAll('.photo').data(d3.range(maxStep));
+
+var update = function() {
+    d3.selectAll('.photo').filter(function(d,i) { return i == step; }).transition().duration(0).style('opacity',1);
+    d3.selectAll('.photo').filter(function(d,i) { return i != step; }).transition().duration(0).style('opacity',0);
+};
+    </script>
+    <script type="text/javascript" src="js/my-slide.js"></script>
+  </body>
+</html>
