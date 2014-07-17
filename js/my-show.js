@@ -75,6 +75,9 @@ d3.select(window).on("keydown", function() {
             navigateBack();
         }
         break;
+      case 72: // 'h' key, pop up help
+        $('#helpModal').modal('show');
+        break;
       case 48: { // 0 key, pop up menu
         if (!visible) {
           d3.selectAll("#menu").style("display", "block");

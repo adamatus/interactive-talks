@@ -9,7 +9,11 @@ body {
   height: 768px;
   margin: auto;
   overflow: hidden;
-  cursor: none;
+  cursor: auto;
+}
+
+body.modal-open {
+  margin: auto;
 }
 
 p { margin: 0; }
@@ -83,4 +87,8 @@ iframe {
   top: 10px;
   left: 10px;
   display: none;
+}
+
+.modal-body p {
+    margin-bottom: 1em;
 }
