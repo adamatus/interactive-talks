@@ -71,6 +71,9 @@ d3.select(window).on("keydown", function() {
         }
         break;
       }
+      case 72:
+        window.parent.$('#helpModal').show();
+        break;
       case 48: { // 0 key, pop up menu (Probably a show function)
         break;
       }
