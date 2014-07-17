@@ -1,0 +1,103 @@
+
+#chart {
+  text-align: center;
+}
+
+svg {
+  display: inline;
+  font-size: 24px;
+  font-family: "Trebuchet MS", sans-serif; 
+}
+
+path {
+  fill: none;
+  stroke-width: 3px;
+  stroke: black;
+}
+
+path.data {
+  stroke: green;
+}
+
+.rule line {
+  stroke: #fff;
+  stroke-opacity: .2;
+  shape-rendering: crispEdges;
+}
+
+.rule:first-child line {
+  stroke: #000;
+  stroke-opacity: 1;
+}
+
+rect {
+  box-shadow: 10px 10px 5px #000;
+  -webkit-filter: drop-shadow( -5px -5px 5px #000 );
+}
+
+text {
+    text-anchor: middle;
+    stroke: none;
+}
+
+text.yAxis {
+  color: black;
+  fill: black;
+  text-shadow: 0 1px 0 #FFF;
+}
+
+.dot {
+    stroke: #FFF;
+    stroke-opacity: 1;
+    fill: #FFF;
+}
+
+.axis, .grid {
+  shape-rendering: crispEdges;
+}
+
+.x.axis line {
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.x.axis line.tick {
+    stroke: none;
+  stroke-width: 3px;
+}
+
+.bars {
+    fill: steelblue;
+    stroke: #777;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.y.axis text {
+    text-anchor: end;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+.y.grid text, .y.grid path {
+    fill: none;
+    stroke: none;
+}
+
+.y.grid line {
+    fill: none;
+    stroke: #000;
+    stroke-opacity: .2;
+}
