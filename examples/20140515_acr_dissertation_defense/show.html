@@ -16,7 +16,45 @@
         </select>
       </form>
     </div>
+<div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Adam Riggall's PhD disseration
+            defense talk</h4>
+      </div>
+      <div class="modal-body">
+          <p>This is the talk I gave during the public portion of my PhD
+          dissertation defense.  The talk covers much of the work I did during
+          my graduate career investigating the neural basis of short-term
+          memory.</p>
+
+          <p>This talk uses my custom<a
+              href="https://github.com/adamatus/interactive-talks">interactive
+              talk framework</a>.</p>
+
+          <p>Navigation:
+          <ul><li>To step forward through the show, press Spacebar</li>
+              <li>To step backward, use Backspace</li>
+              <li>To quickly switch between slides, use the Left and Right
+              arrows</li>
+              <li>To step through the builds within a slide, use the Up and Down
+              arrows</li>
+              <li>Press '0' to bring up a selector to choose a specific
+              slide</li>
+           <ul></p>
+          <p>Press 'H' to bring back this help window.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok, Got It</button>
+      </div>
+    </div>
+  </div>
+</div>
     <script type="text/javascript">
+$('#helpModal').modal('show');
+
 var slides = [
   {title:"Title Page",loc:"title.html"},
   //{title:"Overview",loc:"overview.html"},
