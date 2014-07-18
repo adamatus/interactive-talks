@@ -9,9 +9,9 @@ make them respond in interesting ways to mouse interaction.
 Like to get your hands dirty writing code? This framework is for you. Everything
 is pure HTML and javascript, with only a simple structure to power everything.
 With that simplicity come incredible flexibility and power. Anything you can do
-on the web can be embeded directly into your talk.
+on the web can be embedded directly into your talk.
 
-The framework was inspired by Mike Bostock's early highligh reel talks showing
+The framework was inspired by Mike Bostock's early highlight reel talks showing
 off the power of d3. I've considerably tweaked the framework to work with my
 presentation style and added some addition navigation functions.
 
