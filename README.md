@@ -13,7 +13,7 @@ on the web can be embedded directly into your talk.
 
 The framework was inspired by Mike Bostock's early highlight reel talks showing
 off the power of d3. I've considerably tweaked the framework to work with my
-presentation style and added some addition navigation functions.
+presentation style and added some additional navigation functions.
 
 Demos
 =====
